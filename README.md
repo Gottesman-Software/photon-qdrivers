@@ -4,6 +4,7 @@
 
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![CI](https://github.com/denniswayo/photon-qdrivers/actions/workflows/ci.yml/badge.svg)](https://github.com/denniswayo/photon-qdrivers/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/DennisWayo/photon-qdrivers?label=release)](https://github.com/DennisWayo/photon-qdrivers/releases)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![C++](https://img.shields.io/badge/C%2B%2B-17-00599C.svg)
 ![CMake](https://img.shields.io/badge/CMake-3.16%2B-064F8C.svg)
