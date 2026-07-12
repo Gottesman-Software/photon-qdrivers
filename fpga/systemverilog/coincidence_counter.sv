@@ -17,8 +17,9 @@ module coincidence_counter #(
 
     localparam int WINDOW_WIDTH = (WINDOW_CYCLES <= 1) ? 1 : $clog2(WINDOW_CYCLES + 1);
     localparam logic [WINDOW_WIDTH-1:0] WINDOW_VALUE = WINDOW_WIDTH'(WINDOW_CYCLES);
+    localparam int ACTIVE_WIDTH = $clog2(DETECTORS + 1);
 
-    logic [$clog2(DETECTORS + 1)-1:0] active_detectors;
+    logic [ACTIVE_WIDTH-1:0] active_detectors;
     logic [DETECTORS-1:0] window_bits;
     logic [WINDOW_WIDTH-1:0] window_remaining;
     logic window_active;
@@ -26,7 +27,7 @@ module coincidence_counter #(
     always_comb begin
         active_detectors = '0;
         for (int index = 0; index < DETECTORS; index++) begin
-            active_detectors = active_detectors + window_bits[index];
+            active_detectors = active_detectors + ACTIVE_WIDTH'(window_bits[index]);
         end
     end
 
