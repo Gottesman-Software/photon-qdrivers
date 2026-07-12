@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "photon-qdrivers"
+version = "0.1.0"
+description = "Universal photonic quantum hardware driver framework."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [
+  { name = "Photon-QDrivers contributors" }
+]
+keywords = ["photonic", "quantum", "drivers", "fpga", "hardware"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: C++",
+  "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+Homepage = "https://github.com/denniswayo/photon-qdrivers"
+Repository = "https://github.com/denniswayo/photon-qdrivers"
+Issues = "https://github.com/denniswayo/photon-qdrivers/issues"
+Documentation = "https://github.com/denniswayo/photon-qdrivers/tree/main/docs"
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+perceval = ["perceval-quandela>=1.2"]
+quandela = ["perceval-quandela>=1.2"]
+xanadu = [
+  "strawberryfields>=0.23; python_version < '3.11'",
+  "xanadu-cloud-client>=0.3; python_version < '3.11'",
+  "setuptools<81; python_version < '3.11'",
+  "numpy>=1.24.3,<2; python_version < '3.11'",
+  "scipy<1.14; python_version < '3.11'",
+]
+piquasso = ["piquasso>=6"]
+qutip = ["qutip>=5"]
+dynamiqs = ["dynamiqs>=0.3; python_version >= '3.11'"]
+thewalrus = ["thewalrus>=0.20"]
+lightworks = ["lightworks>=0.1"]
+strawberryfields = [
+  "strawberryfields>=0.23; python_version < '3.11'",
+  "setuptools<81; python_version < '3.11'",
+  "numpy>=1.24.3,<2; python_version < '3.11'",
+  "scipy<1.14; python_version < '3.11'",
+]
+psiquantum = ["psiqdk>=2"]
+hardware = [
+  "perceval-quandela>=1.2",
+  "strawberryfields>=0.23; python_version < '3.11'",
+  "xanadu-cloud-client>=0.3; python_version < '3.11'",
+  "setuptools<81; python_version < '3.11'",
+  "numpy>=1.24.3,<2; python_version < '3.11'",
+  "scipy<1.14; python_version < '3.11'",
+]
+emulators = [
+  "perceval-quandela>=1.2",
+  "piquasso>=6",
+  "qutip>=5",
+  "dynamiqs>=0.3; python_version >= '3.11'",
+  "thewalrus>=0.20",
+  "lightworks>=0.1",
+  "strawberryfields>=0.23; python_version < '3.11'",
+  "setuptools<81; python_version < '3.11'",
+  "numpy>=1.24.3,<2; python_version < '3.11'",
+  "scipy<1.14; python_version < '3.11'",
+]
+
+[tool.setuptools]
+package-dir = { "" = "python" }
+
+[tool.setuptools.packages.find]
+where = ["python"]
+
+[tool.setuptools.package-data]
+photon_qdrivers = ["py.typed"]
+photonic_driver = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["python"]

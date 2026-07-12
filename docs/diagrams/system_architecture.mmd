@@ -1,0 +1,55 @@
+flowchart TD
+    App["Research App / Notebook / Service"]
+    Driver["Python API<br/>PhotonDriver"]
+    IR["Validated IR<br/>PhotonicCircuit v1"]
+    Caps["Capability Checks<br/>BackendCapabilities"]
+    Backend{"Selected Backend"}
+
+    Mock["Mock Backend<br/>fast tests"]
+    Emulator["Local Emulator<br/>contract testing"]
+    Simulator["Simulator Adapter<br/>SchroSIM plugin"]
+    Runtime["C++ Runtime<br/>low-latency boundary"]
+
+    HAL["Hardware Abstraction Layer<br/>device capabilities, calibration, timing"]
+    FPGADriver["FPGA Driver<br/>transport, command buffers, result buffers"]
+    Firmware["SystemVerilog Firmware"]
+    Scheduler["Pulse Scheduler"]
+    Readout["Detector Readout"]
+    Counter["Coincidence Counter"]
+    FPGA["Physical FPGA"]
+    Photonics["Photonic Quantum Hardware<br/>sources, interferometers, detectors"]
+
+    Registry["Plugin Registry"]
+    Decoder["Decoder Adapter<br/>LiDMaS+ plugin"]
+    Result["PhotonicResult<br/>counts, shots, status, metadata"]
+
+    App --> Driver
+    Driver --> IR
+    IR --> Caps
+    Caps --> Backend
+
+    Backend --> Mock
+    Backend --> Emulator
+    Backend --> Simulator
+    Backend --> Runtime
+
+    Registry --> Simulator
+    Registry --> Decoder
+
+    Runtime --> HAL
+    HAL --> FPGADriver
+    FPGADriver --> Firmware
+    Firmware --> Scheduler
+    Firmware --> Readout
+    Firmware --> Counter
+    Scheduler --> FPGA
+    Readout --> FPGA
+    Counter --> FPGA
+    FPGA --> Photonics
+
+    Mock --> Result
+    Emulator --> Result
+    Simulator --> Result
+    Runtime --> Result
+    Result --> Decoder
+    Result --> App

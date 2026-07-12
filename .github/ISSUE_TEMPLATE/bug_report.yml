@@ -1,0 +1,49 @@
+name: Bug report
+description: Report a reproducible problem in Photon-QDrivers.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction Steps
+      description: Provide the smallest circuit, command, or job that reproduces the issue.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: input
+    id: backend
+    attributes:
+      label: Backend Or Target
+      description: Example: mock, perceval, qutip, xanadu, fpga, c++ runtime.
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python, compiler, FPGA tools, emulator/vendor SDK versions.
+      value: |
+        - OS:
+        - Python:
+        - Photon-QDrivers commit:
+        - Backend/SDK:
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      render: text
+    validations:
+      required: false

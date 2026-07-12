@@ -1,0 +1,5 @@
+fpga/systemverilog/photon_qdriver_pkg.sv
+fpga/systemverilog/pulse_scheduler.sv
+fpga/systemverilog/detector_readout.sv
+fpga/systemverilog/coincidence_counter.sv
+fpga/systemverilog/top_photon_qdriver.sv

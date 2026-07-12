@@ -1,0 +1,11 @@
+flowchart TD
+    Contract["PhotonicBackend Contract"]
+    Contract --> Mock["mock<br/>deterministic, fast, CI-friendly"]
+    Contract --> Emulator["emulator<br/>contract-realistic, local"]
+    Contract --> Simulator["simulator adapters<br/>SchroSIM, future engines"]
+    Contract --> Hardware["hardware adapters<br/>vendor SDK or FPGA transport"]
+
+    Mock --> Tests["unit tests"]
+    Emulator --> Integration["workflow integration tests"]
+    Simulator --> Physics["physics-level simulation"]
+    Hardware --> HIL["hardware-in-the-loop tests"]

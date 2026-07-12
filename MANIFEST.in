@@ -1,0 +1,18 @@
+include CMakeLists.txt
+include CITATION.cff
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include GOVERNANCE.md
+include LICENSE
+include README.md
+include SECURITY.md
+include SUPPORT.md
+
+recursive-include cpp *.cpp *.h *.hpp
+recursive-include docs *.md *.mmd *.png *.svg *.json
+recursive-include docs/examples *.py
+exclude docs/strategic.md
+exclude docs/hardware_lab.md
+recursive-include fpga *.cpp *.f *.hpp *.md *.sv
+recursive-include plugins *.md
+recursive-include tests *.py

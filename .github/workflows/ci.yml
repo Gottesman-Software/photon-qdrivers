@@ -1,0 +1,139 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12", "3.14"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+          python -m pip check
+
+      - name: Compile Python sources
+        run: python -m compileall -q python
+
+      - name: Run Python tests
+        run: pytest
+
+      - name: Run smoke example
+        run: python docs/examples/run_mock_device.py
+
+  optional-adapters:
+    name: Optional Adapters ${{ matrix.profile }} / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.10"
+            profile: legacy
+          - python-version: "3.12"
+            profile: modern
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install public optional adapters
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,emulators,hardware]"
+          python -m pip check
+
+      - name: Run Python tests
+        run: pytest
+
+      - name: Run docs examples
+        run: |
+          python docs/examples/run_mock_device.py
+          python docs/examples/run_local_emulator.py
+          python docs/examples/simulate_with_schrosim.py
+          python docs/examples/decode_with_lidmas.py
+          python docs/examples/run_optional_sampling_adapters.py
+          python docs/examples/run_thewalrus_kernel.py
+          python docs/examples/run_qutip_dynamics.py
+          python docs/examples/run_dynamiqs_dynamics.py
+          python docs/examples/run_strawberryfields_legacy.py
+
+  native:
+    name: C++ Runtime And FPGA Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install native toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake \
+            g++ \
+            iverilog \
+            ninja-build \
+            verilator
+
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  package:
+    name: Package Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Build and check distributions
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build twine
+          python -m build
+          python -m twine check dist/*

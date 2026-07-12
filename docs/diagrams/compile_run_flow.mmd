@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    actor User
+    participant Driver as PhotonDriver
+    participant IR as PhotonicCircuit
+    participant Caps as BackendCapabilities
+    participant Backend as Active Backend
+    participant Device as PhotonicDevice
+    participant Result as PhotonicResult
+
+    User->>Driver: load_backend("emulator" or "mock")
+    Driver->>Backend: initialize()
+    Backend-->>Driver: ready
+
+    User->>Driver: compile(circuit_dict)
+    Driver->>IR: normalize and validate schema
+    IR-->>Driver: validated circuit
+    Driver->>Caps: validate modes, shots, operations
+    Caps-->>Driver: accepted
+    Driver->>Backend: compile(PhotonicCircuit)
+    Backend->>Device: attach capability metadata
+    Backend-->>Driver: PhotonicJob
+
+    User->>Driver: run(job)
+    Driver->>Backend: run(PhotonicJob)
+    Backend-->>Result: counts, status, metadata
+    Result-->>Driver: normalized result
+    Driver-->>User: result dictionary

@@ -1,0 +1,72 @@
+flowchart TD
+    Targets["Target Photonic Emulators / Simulators"]
+    Strawberry["Strawberry Fields<br/>archived legacy"]
+    PennyLaneSF["PennyLane-SF<br/>legacy SF bridge"]
+    Perceval["Perceval"]
+    Piquasso["Piquasso"]
+    Lightworks["Lightworks"]
+    Walrus["The Walrus<br/>GBS kernels"]
+    QuTiP["QuTiP<br/>quantum optics"]
+    Dynamiqs["Dynamiqs<br/>JAX dynamics"]
+    SchroSIM["SchroSIM<br/>planned adapter"]
+    Circuit["User Circuit<br/>dict or PhotonicCircuit"]
+    Driver["PhotonDriver"]
+    IR["PhotonicCircuit v1<br/>validated IR"]
+    Caps["BackendCapabilities<br/>mode, shots, operation checks"]
+    Adapter{"Emulator Adapter"}
+    Lowering["IR Lowering<br/>backend-specific circuit/program"]
+
+    subgraph Models["Execution Models"]
+        Contract["Contract deterministic counts"]
+        CV["Continuous-variable<br/>Gaussian / Fock"]
+        DV["Discrete-variable<br/>linear optics"]
+        GBS["Boson sampling / GBS"]
+        Noise["Noise and imperfection models"]
+    end
+
+    Samples["Samples / probabilities / state data"]
+    Normalize["Result Normalizer"]
+    Result["PhotonicResult<br/>counts, status, metadata"]
+    Parity["Hardware Parity Checks<br/>same schema, capability model, tests"]
+
+    Targets --> Strawberry
+    Targets --> PennyLaneSF
+    Targets --> Perceval
+    Targets --> Piquasso
+    Targets --> Lightworks
+    Targets --> Walrus
+    Targets --> QuTiP
+    Targets --> Dynamiqs
+    Targets --> SchroSIM
+
+    Strawberry --> Adapter
+    PennyLaneSF --> Adapter
+    Perceval --> Adapter
+    Piquasso --> Adapter
+    Lightworks --> Adapter
+    Walrus --> Adapter
+    QuTiP --> Adapter
+    Dynamiqs --> Adapter
+    SchroSIM --> Adapter
+
+    Circuit --> Driver
+    Driver --> IR
+    IR --> Caps
+    Caps --> Adapter
+    Adapter --> Lowering
+
+    Lowering --> Contract
+    Lowering --> CV
+    Lowering --> DV
+    Lowering --> GBS
+    Lowering --> Noise
+
+    Contract --> Samples
+    CV --> Samples
+    DV --> Samples
+    GBS --> Samples
+    Noise --> Samples
+
+    Samples --> Normalize
+    Normalize --> Result
+    Result --> Parity

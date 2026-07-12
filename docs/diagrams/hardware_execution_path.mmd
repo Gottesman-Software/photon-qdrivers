@@ -1,0 +1,63 @@
+flowchart TD
+    subgraph Vendors["Target Photonic Hardware Vendors"]
+        Xanadu["Xanadu"]
+        Quandela["Quandela"]
+        Orca["ORCA Computing"]
+        PsiQuantum["PsiQuantum"]
+    end
+
+    Job["PhotonicJob<br/>validated and compiled"]
+    Runtime["C++ Runtime"]
+    HAL["HAL"]
+    Final["PhotonicResult"]
+
+    Xanadu --> Job
+    Quandela --> Job
+    Orca --> Job
+    PsiQuantum --> Job
+    Job --> Runtime
+    Runtime --> HAL
+
+    subgraph Transport["Hardware Transport"]
+        PCIe["PCIe / DMA"]
+        Ethernet["Ethernet"]
+        USB["USB"]
+        Vendor["Vendor SDK"]
+    end
+
+    HAL --> PCIe
+    HAL --> Ethernet
+    HAL --> USB
+    HAL --> Vendor
+
+    subgraph Driver["FPGA Driver"]
+        Registers["Register Map"]
+        CommandFIFO["Command FIFO"]
+        ResultFIFO["Result FIFO"]
+    end
+
+    PCIe --> Registers
+    Ethernet --> Registers
+    USB --> Registers
+    Vendor --> Registers
+    Registers --> CommandFIFO
+
+    subgraph Firmware["SystemVerilog Firmware"]
+        SV["SystemVerilog Top"]
+        Pulse["Pulse Scheduler"]
+        Detect["Detector Readout"]
+        Coinc["Coincidence Counter"]
+    end
+
+    CommandFIFO --> SV
+    SV --> Pulse
+    SV --> Detect
+    Detect --> Coinc
+    Coinc --> ResultFIFO
+
+    Results["Raw Results"]
+    Decode["Result Decoder"]
+
+    ResultFIFO --> Results
+    Results --> Decode
+    Decode --> Final
