@@ -15,6 +15,8 @@ public:
   void initialize();
   void submit_job(const RuntimeJob& job);
   RuntimeResult read_result(const std::string& job_id);
+  void submit_control(const ControlRequest& request);
+  ControlReply read_control_result(const std::string& job_id);
   void shutdown();
 
   bool initialized() const;

@@ -19,6 +19,14 @@ RuntimeResult Device::read_result(const std::string& job_id) {
   return fpga_driver_.read_result(job_id);
 }
 
+void Device::submit_control(const ControlRequest& request) {
+  fpga_driver_.submit_control(request);
+}
+
+ControlReply Device::read_control_result(const std::string& job_id) {
+  return fpga_driver_.read_control_result(job_id);
+}
+
 void Device::shutdown() {
   fpga_driver_.shutdown();
 }

@@ -36,8 +36,24 @@ PHOTON_QDRIVERS_CAPI_API int pqdr_runtime_submit_job(
     uint32_t modes,
     uint64_t shots,
     const char* operations_csv);
+PHOTON_QDRIVERS_CAPI_API int pqdr_runtime_submit_control(
+    pqdr_runtime* handle,
+    const char* job_id,
+    const char* program_id,
+    const char* profile_id,
+    const char* profile_digest,
+    const char* program_digest,
+    const char* envelope_digest,
+    const char* compiled_payload,
+    uint64_t shots,
+    uint64_t repetition_ticks,
+    uint64_t sweep_points,
+    uint64_t event_count);
 
 PHOTON_QDRIVERS_CAPI_API const char* pqdr_runtime_read_result(
+    pqdr_runtime* handle,
+    const char* job_id);
+PHOTON_QDRIVERS_CAPI_API const char* pqdr_runtime_read_control_result(
     pqdr_runtime* handle,
     const char* job_id);
 PHOTON_QDRIVERS_CAPI_API const char* pqdr_runtime_capabilities(pqdr_runtime* handle);

@@ -14,6 +14,7 @@ python docs/examples/run_qutip_dynamics.py
 python docs/examples/run_dynamiqs_dynamics.py
 python docs/examples/run_strawberryfields_legacy.py
 python docs/examples/run_native_runtime.py
+python docs/examples/run_red_pitaya_control_loopback.py
 ```
 
 Use Python 3.12+ for modern emulator examples such as Dynamiqs. Use Python 3.10
@@ -25,5 +26,9 @@ The native runtime example requires the C++ library first:
 cmake -S . -B build
 cmake --build build
 python docs/examples/run_native_runtime.py
+python docs/examples/run_red_pitaya_control_loopback.py
 ```
 
+The Red Pitaya control example uses temporary mailbox files and the deterministic
+software bridge. It demonstrates the public framing and normalization path; it
+does not communicate with a physical board.

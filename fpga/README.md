@@ -8,7 +8,14 @@ SDK transport.
 ## Modules
 
 - `systemverilog/photon_qdriver_pkg.sv`: shared parameters, status enum, and
-  package guard.
+  P5 opcode/error contracts.
+- `systemverilog/control_instruction_decoder.sv`: decodes and validates the
+  fixed 128-bit P5 instruction.
+- `systemverilog/control_schedule_engine.sv`: loads and executes one compiled
+  schedule template in logical device ticks, with decoded observations, pulse
+  masks, acquisition counting, saturation, and structured errors.
+- `systemverilog/red_pitaya_control_bridge.sv`: exposes the P5 engine through
+  the fixed P6.0 32-bit MMIO capability, instruction, status, and result map.
 - `systemverilog/pulse_scheduler.sv`: accepts pulse commands, enforces
   non-empty masks, holds pulses for a configurable number of cycles, and reports
   busy/error state.
@@ -19,6 +26,12 @@ SDK transport.
 - `systemverilog/top_photon_qdriver.sv`: connects scheduler, readout, counter,
   status, and error signaling.
 - `testbench/tb_top_photon_qdriver.sv`: self-checking simulation testbench.
+- `testbench/tb_control_schedule_engine.sv`: self-checking P5 schedule-parity,
+  saturation, and fault-injection testbench.
+- `testbench/tb_red_pitaya_control_bridge.sv`: self-checking P6.0 MMIO load,
+  execution, result-readback, capability, and read-only-write testbench.
+- `testbench/fixtures/p5_control_program.hex`: immutable six-instruction P5
+  reference shared with Python and RTL tests.
 
 ## Simulation
 
@@ -32,6 +45,26 @@ verilator --lint-only -sv -I./fpga/systemverilog -f fpga/filelist.f
 iverilog -g2012 -I fpga/systemverilog -o /tmp/tb_top_photon_qdriver \
   fpga/testbench/tb_top_photon_qdriver.sv
 vvp /tmp/tb_top_photon_qdriver
+```
+
+The P5 reference test is:
+
+```bash
+iverilog -g2012 -I fpga/systemverilog \
+  -o /tmp/tb_control_schedule_engine \
+  fpga/testbench/tb_control_schedule_engine.sv
+vvp /tmp/tb_control_schedule_engine \
+  +PROGRAM=fpga/testbench/fixtures/p5_control_program.hex
+```
+
+The P6.0 register-interface test is:
+
+```bash
+iverilog -g2012 -I fpga/systemverilog \
+  -o /tmp/tb_red_pitaya_control_bridge \
+  fpga/testbench/tb_red_pitaya_control_bridge.sv
+vvp /tmp/tb_red_pitaya_control_bridge \
+  +PROGRAM=fpga/testbench/fixtures/p5_control_program.hex
 ```
 
 When Verilator or Icarus Verilog are installed, CMake registers FPGA checks with
@@ -65,9 +98,9 @@ driver = Driver.load(
 ```
 
 This profile uses the shared mailbox protocol and reports the device as
-`red-pitaya-stemlab-125-14`. The first production board integration should add
-a Red Pitaya process or FPGA bridge that connects those paths to the portable
-SystemVerilog modules in this directory.
+`red-pitaya-stemlab-125-14`. P6.0 supplies the verified board-program bridge and
+MMIO RTL wrapper. P6.1 must map the wrapper into a synthesized Red Pitaya image
+or a live board daemon.
 
 ## Host Mailbox Contract
 
@@ -76,15 +109,20 @@ command mailbox and reads result frames from a result mailbox. During tests thes
 mailboxes can be regular files; on hardware they should be character devices,
 named pipes, PCIe BAR-backed endpoints, or another driver-provided transport.
 
-Firmware or a board-side daemon should consume `PQDR_JOB_V1` frames and produce
-matching `PQDR_RESULT_V1` frames. The frame format is documented in
-`docs/cpp_runtime.md`.
+The legacy job path consumes `PQDR_JOB_V1` and produces `PQDR_RESULT_V1`. The
+P4 control path consumes `PQDR_CONTROL_V1` and returns
+`PQDR_CONTROL_RESULT_V1`; its frame contract is documented in
+[`docs/control_protocol.md`](../docs/control_protocol.md). P5 adds the separate
+fixed-width instruction image used inside the schedule engine. The P6.0
+`P6BoardBridge` now verifies and correlates the P4 request, produces a
+capability-bound P5 image, and serializes acquisition evidence into the P4
+result direction.
 
 ## Next Production Steps
 
-- Map the mailbox protocol onto command and result FIFOs.
-- Add a memory-mapped register interface for status, control, and capability
-  discovery.
+- Map the implemented P6.0 registers onto Red Pitaya AXI or a deployed board
+  daemon.
 - Add board-specific constraints for one selected board.
 - Add CDC rules if host and control logic use different clocks.
-- Add Verilator or simulator CI once a simulator is available.
+- Execute the immutable P5 fixture through a Red Pitaya digital loopback and
+  compare physical timing, counts, overflow, and dropped events.
