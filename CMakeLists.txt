@@ -15,6 +15,8 @@ add_library(
   cpp/src/fpga_driver.cpp
   cpp/src/transport.cpp
   cpp/src/types.cpp
+  cpp/src/control_protocol.cpp
+  cpp/src/sha256.cpp
 )
 
 target_include_directories(
@@ -95,6 +97,34 @@ if(VERILATOR_EXECUTABLE)
       ${VERILATOR_EXECUTABLE}
       --lint-only
       -sv
+      --top-module
+      top_photon_qdriver
+      -I${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog
+      -f
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/filelist.f
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+  add_test(
+    NAME fpga_control_verilator_lint
+    COMMAND
+      ${VERILATOR_EXECUTABLE}
+      --lint-only
+      -sv
+      --top-module
+      control_schedule_engine
+      -I${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog
+      -f
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/filelist.f
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+  add_test(
+    NAME fpga_red_pitaya_bridge_verilator_lint
+    COMMAND
+      ${VERILATOR_EXECUTABLE}
+      --lint-only
+      -sv
+      --top-module
+      red_pitaya_control_bridge
       -I${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog
       -f
       ${CMAKE_CURRENT_SOURCE_DIR}/fpga/filelist.f
@@ -106,6 +136,14 @@ find_program(IVERILOG_EXECUTABLE iverilog)
 find_program(VVP_EXECUTABLE vvp)
 if(IVERILOG_EXECUTABLE AND VVP_EXECUTABLE)
   set(FPGA_TESTBENCH_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/fpga/tb_top_photon_qdriver.vvp)
+  set(
+    FPGA_CONTROL_TESTBENCH_OUTPUT
+    ${CMAKE_CURRENT_BINARY_DIR}/fpga/tb_control_schedule_engine.vvp
+  )
+  set(
+    FPGA_RED_PITAYA_TESTBENCH_OUTPUT
+    ${CMAKE_CURRENT_BINARY_DIR}/fpga/tb_red_pitaya_control_bridge.vvp
+  )
 
   add_custom_command(
     OUTPUT ${FPGA_TESTBENCH_OUTPUT}
@@ -130,4 +168,69 @@ if(IVERILOG_EXECUTABLE AND VVP_EXECUTABLE)
 
   add_custom_target(fpga_tb_top_photon_qdriver ALL DEPENDS ${FPGA_TESTBENCH_OUTPUT})
   add_test(NAME fpga_tb_top_photon_qdriver COMMAND ${VVP_EXECUTABLE} ${FPGA_TESTBENCH_OUTPUT})
+
+  add_custom_command(
+    OUTPUT ${FPGA_CONTROL_TESTBENCH_OUTPUT}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/fpga
+    COMMAND
+      ${IVERILOG_EXECUTABLE}
+      -g2012
+      -I
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog
+      -o
+      ${FPGA_CONTROL_TESTBENCH_OUTPUT}
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/tb_control_schedule_engine.sv
+    DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/tb_control_schedule_engine.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/fixtures/p5_control_program.hex
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/photon_qdriver_pkg.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/control_instruction_decoder.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/control_schedule_engine.sv
+    VERBATIM
+  )
+
+  add_custom_target(
+    fpga_tb_control_schedule_engine ALL
+    DEPENDS ${FPGA_CONTROL_TESTBENCH_OUTPUT}
+  )
+  add_test(
+    NAME fpga_tb_control_schedule_engine
+    COMMAND
+      ${VVP_EXECUTABLE}
+      ${FPGA_CONTROL_TESTBENCH_OUTPUT}
+      +PROGRAM=${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/fixtures/p5_control_program.hex
+  )
+
+  add_custom_command(
+    OUTPUT ${FPGA_RED_PITAYA_TESTBENCH_OUTPUT}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/fpga
+    COMMAND
+      ${IVERILOG_EXECUTABLE}
+      -g2012
+      -I
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog
+      -o
+      ${FPGA_RED_PITAYA_TESTBENCH_OUTPUT}
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/tb_red_pitaya_control_bridge.sv
+    DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/tb_red_pitaya_control_bridge.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/fixtures/p5_control_program.hex
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/photon_qdriver_pkg.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/control_instruction_decoder.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/control_schedule_engine.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/red_pitaya_control_bridge.sv
+    VERBATIM
+  )
+
+  add_custom_target(
+    fpga_tb_red_pitaya_control_bridge ALL
+    DEPENDS ${FPGA_RED_PITAYA_TESTBENCH_OUTPUT}
+  )
+  add_test(
+    NAME fpga_tb_red_pitaya_control_bridge
+    COMMAND
+      ${VVP_EXECUTABLE}
+      ${FPGA_RED_PITAYA_TESTBENCH_OUTPUT}
+      +PROGRAM=${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/fixtures/p5_control_program.hex
+  )
 endif()

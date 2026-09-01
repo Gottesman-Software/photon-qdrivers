@@ -34,6 +34,21 @@ RuntimeResult FPGADriver::read_result(const std::string& job_id) {
   return transport_->read_result(job_id);
 }
 
+void FPGADriver::submit_control(const ControlRequest& request) {
+  if (!initialized_) {
+    throw RuntimeError("FPGA driver is not initialized");
+  }
+  transport_->submit_control(request);
+  last_job_id_ = request.job_id;
+}
+
+ControlReply FPGADriver::read_control_result(const std::string& job_id) {
+  if (!initialized_) {
+    throw RuntimeError("FPGA driver is not initialized");
+  }
+  return transport_->read_control_result(job_id);
+}
+
 void FPGADriver::shutdown() {
   transport_->close();
   initialized_ = false;

@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "photon_qdrivers/runtime.hpp"
+#include "photon_qdrivers/control_protocol.hpp"
 #include "photon_qdrivers/transport.hpp"
 #include "photon_qdrivers/types.hpp"
 
@@ -126,6 +127,32 @@ std::string capabilities_to_json(const photon_qdrivers::DeviceCapabilities& capa
   out << "],";
   out << "\"realtime\":" << (capabilities.realtime ? "true" : "false") << ",";
   out << "\"hardware_backed\":" << (capabilities.hardware_backed ? "true" : "false") << "}";
+  return out.str();
+}
+
+std::string control_reply_to_json(const photon_qdrivers::ControlReply& reply) {
+  std::ostringstream out;
+  out << "{\"protocol\":\"" << json_escape(reply.protocol) << "\",";
+  out << "\"job_id\":\"" << json_escape(reply.job_id) << "\",";
+  out << "\"program_id\":\"" << json_escape(reply.program_id) << "\",";
+  out << "\"profile_id\":\"" << json_escape(reply.profile_id) << "\",";
+  out << "\"profile_digest\":\"" << json_escape(reply.profile_digest) << "\",";
+  out << "\"program_digest\":\"" << json_escape(reply.program_digest) << "\",";
+  out << "\"envelope_digest\":\"" << json_escape(reply.envelope_digest) << "\",";
+  out << "\"acquisition_digest\":\""
+      << json_escape(reply.acquisition_digest) << "\",";
+  out << "\"status\":\"" << photon_qdrivers::to_string(reply.status) << "\",";
+  out << "\"shots\":" << reply.shots << ",";
+  out << "\"repetition_ticks\":" << reply.repetition_ticks << ",";
+  out << "\"sweep_points\":" << reply.sweep_points << ",";
+  out << "\"event_count\":" << reply.event_count << ",";
+  out << "\"acquisition_count\":" << reply.acquisition_count << ",";
+  out << "\"total_device_ticks\":" << reply.total_device_ticks << ",";
+  out << "\"overflowed_acquisitions\":" << reply.overflowed_acquisitions << ",";
+  out << "\"dropped_events\":" << reply.dropped_events << ",";
+  out << "\"acquisition_payload\":\""
+      << json_escape(reply.acquisition_payload) << "\",";
+  out << "\"message\":\"" << json_escape(reply.message) << "\"}";
   return out.str();
 }
 
@@ -264,6 +291,43 @@ int pqdr_runtime_submit_job(
   });
 }
 
+int pqdr_runtime_submit_control(
+    pqdr_runtime* handle,
+    const char* job_id,
+    const char* program_id,
+    const char* profile_id,
+    const char* profile_digest,
+    const char* program_digest,
+    const char* envelope_digest,
+    const char* compiled_payload,
+    uint64_t shots,
+    uint64_t repetition_ticks,
+    uint64_t sweep_points,
+    uint64_t event_count) {
+  if (job_id == nullptr || program_id == nullptr || profile_id == nullptr ||
+      profile_digest == nullptr || program_digest == nullptr ||
+      envelope_digest == nullptr || compiled_payload == nullptr) {
+    return failure(handle, "all control envelope string fields are required");
+  }
+
+  return call_status(handle, [&]() {
+    photon_qdrivers::ControlRequest request{
+        job_id,
+        program_id,
+        profile_id,
+        profile_digest,
+        program_digest,
+        envelope_digest,
+        compiled_payload,
+        shots,
+        repetition_ticks,
+        sweep_points,
+        event_count,
+    };
+    handle->runtime.submit_control(request);
+  });
+}
+
 const char* pqdr_runtime_read_result(pqdr_runtime* handle, const char* job_id) {
   if (job_id == nullptr) {
     set_error(handle, "job_id is required");
@@ -272,6 +336,18 @@ const char* pqdr_runtime_read_result(pqdr_runtime* handle, const char* job_id) {
 
   return call_string(handle, "{\"status\":\"failed\"}", [&]() {
     return result_to_json(handle->runtime.read_result(job_id));
+  });
+}
+
+const char* pqdr_runtime_read_control_result(
+    pqdr_runtime* handle, const char* job_id) {
+  if (job_id == nullptr) {
+    set_error(handle, "control job_id is required");
+    return "{\"status\":\"failed\",\"message\":\"control job_id is required\"}";
+  }
+
+  return call_string(handle, "{\"status\":\"failed\"}", [&]() {
+    return control_reply_to_json(handle->runtime.read_control_result(job_id));
   });
 }
 

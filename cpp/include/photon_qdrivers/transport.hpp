@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "photon_qdrivers/control_protocol.hpp"
 #include "photon_qdrivers/types.hpp"
 
 namespace photon_qdrivers {
@@ -18,6 +19,8 @@ public:
   virtual DeviceCapabilities capabilities() const = 0;
   virtual void submit(const RuntimeJob& job) = 0;
   virtual RuntimeResult read_result(const std::string& job_id) = 0;
+  virtual void submit_control(const ControlRequest& request) = 0;
+  virtual ControlReply read_control_result(const std::string& job_id) = 0;
 };
 
 class InMemoryTransport final : public Transport {
@@ -30,6 +33,8 @@ public:
   DeviceCapabilities capabilities() const override;
   void submit(const RuntimeJob& job) override;
   RuntimeResult read_result(const std::string& job_id) override;
+  void submit_control(const ControlRequest& request) override;
+  ControlReply read_control_result(const std::string& job_id) override;
 
   static DeviceCapabilities default_capabilities();
 
@@ -37,6 +42,7 @@ private:
   bool open_{false};
   DeviceCapabilities capabilities_;
   std::optional<RuntimeJob> last_job_;
+  std::optional<ControlRequest> last_control_request_;
 };
 
 class FPGAMailboxTransport final : public Transport {
@@ -51,6 +57,8 @@ public:
   DeviceCapabilities capabilities() const override;
   void submit(const RuntimeJob& job) override;
   RuntimeResult read_result(const std::string& job_id) override;
+  void submit_control(const ControlRequest& request) override;
+  ControlReply read_control_result(const std::string& job_id) override;
 
   const std::string& command_path() const;
   const std::string& result_path() const;
@@ -63,6 +71,7 @@ private:
   std::string command_path_;
   std::string result_path_;
   DeviceCapabilities capabilities_;
+  std::optional<ControlRequest> last_control_request_;
 };
 
 }  // namespace photon_qdrivers

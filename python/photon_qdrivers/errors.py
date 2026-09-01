@@ -9,6 +9,14 @@ class CircuitValidationError(ValueError, PhotonQDriversError):
     """Raised when a symbolic circuit does not satisfy the IR schema."""
 
 
+class ControlValidationError(ValueError, PhotonQDriversError):
+    """Raised when a photonic control-plane object is invalid."""
+
+
+class ControlResourceError(ControlValidationError):
+    """Raised when a control program exceeds a hardware-profile limit."""
+
+
 class BackendCapabilityError(ValueError, PhotonQDriversError):
     """Raised when a backend cannot accept a valid circuit."""
 

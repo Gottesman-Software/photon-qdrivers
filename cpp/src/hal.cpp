@@ -55,6 +55,22 @@ RuntimeResult HAL::read_result(const std::string& job_id) {
   return device_.read_result(job_id);
 }
 
+void HAL::submit_control(const ControlRequest& request) {
+  validate_control_request(request);
+  const auto caps = capabilities();
+  if (caps.max_shots != 0 && request.shots > caps.max_shots) {
+    throw ValidationError("control request exceeds device shot limit");
+  }
+  device_.submit_control(request);
+}
+
+ControlReply HAL::read_control_result(const std::string& job_id) {
+  if (job_id.empty()) {
+    throw ValidationError("control job_id must be non-empty");
+  }
+  return device_.read_control_result(job_id);
+}
+
 void HAL::shutdown() {
   device_.shutdown();
 }

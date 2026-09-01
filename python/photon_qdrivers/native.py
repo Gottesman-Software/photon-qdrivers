@@ -3,12 +3,19 @@
 from __future__ import annotations
 
 import ctypes
+import hashlib
 import json
 import os
 import sys
 from pathlib import Path
 from typing import Any, Mapping
 
+from .control import (
+    CONTROL_RESULT_PROTOCOL,
+    CompiledControlProgram,
+    ControlEnvelope,
+    decode_acquisition_payload,
+)
 from .errors import BackendExecutionError, BackendUnavailableError
 from .job import PhotonicJob
 
@@ -93,6 +100,113 @@ class NativeRuntime:
     def run_job(self, job: PhotonicJob) -> dict[str, Any]:
         self.submit_job(job)
         return self.read_result(job.job_id)
+
+    def submit_control(self, envelope: ControlEnvelope) -> None:
+        """Submit one integrity-checked compiled-control envelope."""
+
+        if not hasattr(self._lib, "pqdr_runtime_submit_control"):
+            raise BackendUnavailableError(
+                "Native C++ runtime does not expose PQDR_CONTROL_V1. "
+                "Rebuild it with `cmake --build build`."
+            )
+        if not isinstance(envelope, ControlEnvelope):
+            raise TypeError("submit_control requires a ControlEnvelope.")
+        values = envelope.to_dict()
+        status = self._lib.pqdr_runtime_submit_control(
+            self._handle,
+            _bytes(values["job_id"]),
+            _bytes(values["program_id"]),
+            _bytes(values["profile_id"]),
+            _bytes(values["profile_digest"]),
+            _bytes(values["program_digest"]),
+            _bytes(values["envelope_digest"]),
+            _bytes(values["compiled_payload"]),
+            ctypes.c_uint64(values["shots"]),
+            ctypes.c_uint64(values["repetition_ticks"]),
+            ctypes.c_uint64(values["sweep_points"]),
+            ctypes.c_uint64(values["event_count"]),
+        )
+        self._check(status)
+
+    def submit_control_program(
+        self,
+        program: CompiledControlProgram,
+        *,
+        job_id: str | None = None,
+    ) -> str:
+        """Construct and submit a native envelope, returning its job id."""
+
+        resolved_job_id = job_id or f"{program.program_id}-native"
+        envelope = ControlEnvelope(
+            job_id=resolved_job_id,
+            program=program,
+        )
+        self.submit_control(envelope)
+        return resolved_job_id
+
+    def read_control_result(self, job_id: str) -> dict[str, Any]:
+        """Read a native reply and validate its returned acquisition evidence."""
+
+        if not hasattr(self._lib, "pqdr_runtime_read_control_result"):
+            raise BackendUnavailableError(
+                "Native C++ runtime does not expose PQDR_CONTROL_RESULT_V1. "
+                "Rebuild it with `cmake --build build`."
+            )
+        result = self._read_json(
+            self._lib.pqdr_runtime_read_control_result(self._handle, _bytes(job_id))
+        )
+        native_error = self.last_error()
+        if native_error:
+            raise BackendExecutionError(native_error)
+        if result.get("protocol") != CONTROL_RESULT_PROTOCOL:
+            raise BackendExecutionError(
+                f"Native runtime returned unsupported control protocol "
+                f"{result.get('protocol')!r}."
+            )
+        payload = result.get("acquisition_payload")
+        digest = result.get("acquisition_digest")
+        if not isinstance(payload, str) or not isinstance(digest, str):
+            raise BackendExecutionError(
+                "Native control reply is missing acquisition payload integrity fields."
+            )
+        observed_digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+        if observed_digest != digest:
+            raise BackendExecutionError(
+                "Native control reply acquisition payload SHA-256 mismatch."
+            )
+        try:
+            records = decode_acquisition_payload(payload)
+        except Exception as exc:
+            raise BackendExecutionError(str(exc)) from exc
+        if len(records) != result.get("acquisition_count"):
+            raise BackendExecutionError(
+                "Native control reply acquisition_count does not match its payload."
+            )
+        if sum(record.dropped_events for record in records) != result.get(
+            "dropped_events"
+        ):
+            raise BackendExecutionError(
+                "Native control reply dropped_events does not match its payload."
+            )
+        if sum(1 for record in records if record.overflow) != result.get(
+            "overflowed_acquisitions"
+        ):
+            raise BackendExecutionError(
+                "Native control reply overflow summary does not match its payload."
+            )
+        result["acquisitions"] = [record.to_dict() for record in records]
+        return result
+
+    def run_control_program(
+        self,
+        program: CompiledControlProgram,
+        *,
+        job_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Submit a compiled program and synchronously read its native reply."""
+
+        resolved_job_id = self.submit_control_program(program, job_id=job_id)
+        return self.read_control_result(resolved_job_id)
 
     def last_error(self) -> str:
         return _decode(self._lib.pqdr_runtime_last_error(self._handle))
@@ -209,8 +323,32 @@ def _configure_signatures(library: ctypes.CDLL) -> None:
     ]
     library.pqdr_runtime_submit_job.restype = ctypes.c_int
 
+    if hasattr(library, "pqdr_runtime_submit_control"):
+        library.pqdr_runtime_submit_control.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_char_p,
+            ctypes.c_char_p,
+            ctypes.c_char_p,
+            ctypes.c_char_p,
+            ctypes.c_char_p,
+            ctypes.c_char_p,
+            ctypes.c_char_p,
+            ctypes.c_uint64,
+            ctypes.c_uint64,
+            ctypes.c_uint64,
+            ctypes.c_uint64,
+        ]
+        library.pqdr_runtime_submit_control.restype = ctypes.c_int
+
     library.pqdr_runtime_read_result.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
     library.pqdr_runtime_read_result.restype = ctypes.c_char_p
+
+    if hasattr(library, "pqdr_runtime_read_control_result"):
+        library.pqdr_runtime_read_control_result.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_char_p,
+        ]
+        library.pqdr_runtime_read_control_result.restype = ctypes.c_char_p
 
     library.pqdr_runtime_capabilities.argtypes = [ctypes.c_void_p]
     library.pqdr_runtime_capabilities.restype = ctypes.c_char_p

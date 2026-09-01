@@ -114,6 +114,109 @@ RuntimeResult unavailable_result(const std::string& job_id, const std::string& m
   };
 }
 
+std::uint64_t parse_uint64_field(const std::string& value, const char* field) {
+  try {
+    std::size_t consumed = 0;
+    const auto parsed = static_cast<std::uint64_t>(std::stoull(value, &consumed));
+    if (consumed != value.size()) {
+      throw TransportError(std::string("malformed control-result field: ") + field);
+    }
+    return parsed;
+  } catch (const TransportError&) {
+    throw;
+  } catch (const std::exception&) {
+    throw TransportError(std::string("malformed control-result field: ") + field);
+  }
+}
+
+ControlReply unavailable_control_result(const std::string& job_id,
+                                        const std::string& message) {
+  ControlReply reply;
+  reply.job_id = job_id;
+  reply.message = message;
+  return reply;
+}
+
+ControlReply parse_control_result_frame(const std::vector<std::string>& lines) {
+  ControlReply result;
+  std::size_t acquisition_payload_length = 0;
+  bool saw_payload_length = false;
+
+  for (const auto& raw_line : lines) {
+    const std::string line = trim(raw_line);
+    if (starts_with(line, "protocol=")) {
+      result.protocol = line.substr(9);
+    } else if (starts_with(line, "job_id=")) {
+      result.job_id = line.substr(7);
+    } else if (starts_with(line, "program_id=")) {
+      result.program_id = line.substr(11);
+    } else if (starts_with(line, "profile_id=")) {
+      result.profile_id = line.substr(11);
+    } else if (starts_with(line, "profile_digest=")) {
+      result.profile_digest = line.substr(15);
+    } else if (starts_with(line, "program_digest=")) {
+      result.program_digest = line.substr(15);
+    } else if (starts_with(line, "envelope_digest=")) {
+      result.envelope_digest = line.substr(16);
+    } else if (starts_with(line, "acquisition_digest=")) {
+      result.acquisition_digest = line.substr(19);
+    } else if (starts_with(line, "status=")) {
+      result.status = parse_status(line.substr(7));
+    } else if (starts_with(line, "shots=")) {
+      result.shots = parse_uint64_field(line.substr(6), "shots");
+    } else if (starts_with(line, "repetition_ticks=")) {
+      result.repetition_ticks =
+          parse_uint64_field(line.substr(17), "repetition_ticks");
+    } else if (starts_with(line, "sweep_points=")) {
+      result.sweep_points = parse_uint64_field(line.substr(13), "sweep_points");
+    } else if (starts_with(line, "event_count=")) {
+      result.event_count = parse_uint64_field(line.substr(12), "event_count");
+    } else if (starts_with(line, "acquisition_count=")) {
+      result.acquisition_count =
+          parse_uint64_field(line.substr(18), "acquisition_count");
+    } else if (starts_with(line, "total_device_ticks=")) {
+      result.total_device_ticks =
+          parse_uint64_field(line.substr(19), "total_device_ticks");
+    } else if (starts_with(line, "overflowed_acquisitions=")) {
+      result.overflowed_acquisitions =
+          parse_uint64_field(line.substr(24), "overflowed_acquisitions");
+    } else if (starts_with(line, "dropped_events=")) {
+      result.dropped_events =
+          parse_uint64_field(line.substr(15), "dropped_events");
+    } else if (starts_with(line, "acquisition_payload_length=")) {
+      acquisition_payload_length = static_cast<std::size_t>(
+          parse_uint64_field(line.substr(27), "acquisition_payload_length"));
+      saw_payload_length = true;
+    } else if (starts_with(line, "acquisition_payload=")) {
+      result.acquisition_payload = raw_line.substr(20);
+    } else if (starts_with(line, "message=")) {
+      result.message = line.substr(8);
+    }
+  }
+
+  if (!saw_payload_length ||
+      result.acquisition_payload.size() != acquisition_payload_length) {
+    throw TransportError("control-result acquisition_payload length mismatch");
+  }
+  validate_control_reply(result);
+  return result;
+}
+
+void validate_control_correlation(const ControlRequest& request,
+                                  const ControlReply& reply) {
+  if (reply.job_id != request.job_id || reply.program_id != request.program_id ||
+      reply.profile_id != request.profile_id ||
+      reply.profile_digest != request.profile_digest ||
+      reply.program_digest != request.program_digest ||
+      reply.envelope_digest != request.envelope_digest ||
+      reply.shots != request.shots ||
+      reply.repetition_ticks != request.repetition_ticks ||
+      reply.sweep_points != request.sweep_points ||
+      reply.event_count != request.event_count) {
+    throw TransportError("control-result does not correlate with submitted request");
+  }
+}
+
 }  // namespace
 
 InMemoryTransport::InMemoryTransport(DeviceCapabilities capabilities)
@@ -126,6 +229,7 @@ void InMemoryTransport::open() {
 void InMemoryTransport::close() {
   open_ = false;
   last_job_.reset();
+  last_control_request_.reset();
 }
 
 bool InMemoryTransport::is_open() const {
@@ -160,6 +264,21 @@ RuntimeResult InMemoryTransport::read_result(const std::string& job_id) {
       deterministic_counts(last_job_->modes, last_job_->shots),
       "completed by in-memory transport",
   };
+}
+
+void InMemoryTransport::submit_control(const ControlRequest& request) {
+  ensure_open(open_);
+  validate_control_request(request);
+  last_control_request_ = request;
+}
+
+ControlReply InMemoryTransport::read_control_result(const std::string& job_id) {
+  ensure_open(open_);
+  if (!last_control_request_.has_value() || last_control_request_->job_id != job_id) {
+    return unavailable_control_result(job_id, "control result is not available");
+  }
+  return complete_control_request(
+      *last_control_request_, "completed by in-memory control transport");
 }
 
 DeviceCapabilities InMemoryTransport::default_capabilities() {
@@ -197,6 +316,7 @@ void FPGAMailboxTransport::open() {
 
 void FPGAMailboxTransport::close() {
   open_ = false;
+  last_control_request_.reset();
 }
 
 bool FPGAMailboxTransport::is_open() const {
@@ -262,6 +382,77 @@ RuntimeResult FPGAMailboxTransport::read_result(const std::string& job_id) {
     frame_lines.push_back(line);
   }
 
+  return latest_match;
+}
+
+void FPGAMailboxTransport::submit_control(const ControlRequest& request) {
+  ensure_open(open_);
+  validate_control_request(request);
+
+  std::ofstream command_stream(command_path_, std::ios::app);
+  if (!command_stream) {
+    throw TransportError("failed to write FPGA command mailbox: " + command_path_);
+  }
+
+  command_stream << kControlProtocolVersion << "\n";
+  command_stream << "job_id=" << request.job_id << "\n";
+  command_stream << "program_id=" << request.program_id << "\n";
+  command_stream << "profile_id=" << request.profile_id << "\n";
+  command_stream << "profile_digest=" << request.profile_digest << "\n";
+  command_stream << "program_digest=" << request.program_digest << "\n";
+  command_stream << "envelope_digest=" << request.envelope_digest << "\n";
+  command_stream << "shots=" << request.shots << "\n";
+  command_stream << "repetition_ticks=" << request.repetition_ticks << "\n";
+  command_stream << "sweep_points=" << request.sweep_points << "\n";
+  command_stream << "event_count=" << request.event_count << "\n";
+  command_stream << "compiled_payload_length=" << request.compiled_payload.size() << "\n";
+  command_stream << "compiled_payload=" << request.compiled_payload << "\n";
+  command_stream << "END\n";
+  last_control_request_ = request;
+}
+
+ControlReply FPGAMailboxTransport::read_control_result(const std::string& job_id) {
+  ensure_open(open_);
+
+  std::ifstream result_stream(result_path_);
+  if (!result_stream) {
+    return unavailable_control_result(
+        job_id, "FPGA control-result mailbox is not available: " + result_path_);
+  }
+
+  std::string line;
+  bool in_frame = false;
+  std::vector<std::string> frame_lines;
+  ControlReply latest_match =
+      unavailable_control_result(job_id, "control result is not available");
+
+  while (std::getline(result_stream, line)) {
+    const std::string trimmed = trim(line);
+    if (trimmed == kControlResultProtocolVersion) {
+      in_frame = true;
+      frame_lines.clear();
+      frame_lines.push_back(std::string("protocol=") + kControlResultProtocolVersion);
+      continue;
+    }
+    if (!in_frame) {
+      continue;
+    }
+    if (trimmed == "END") {
+      ControlReply result = parse_control_result_frame(frame_lines);
+      if (result.job_id == job_id) {
+        if (!last_control_request_.has_value() ||
+            last_control_request_->job_id != job_id) {
+          throw TransportError("control-result has no matching submitted request");
+        }
+        validate_control_correlation(*last_control_request_, result);
+        latest_match = std::move(result);
+      }
+      in_frame = false;
+      frame_lines.clear();
+      continue;
+    }
+    frame_lines.push_back(line);
+  }
   return latest_match;
 }
 

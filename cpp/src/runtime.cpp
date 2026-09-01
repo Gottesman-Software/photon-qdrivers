@@ -29,6 +29,21 @@ RuntimeResult Runtime::read_result(const std::string& job_id) {
   return hal_.read_result(job_id);
 }
 
+void Runtime::submit_control(const ControlRequest& request) {
+  if (!initialized_) {
+    throw RuntimeError("runtime is not initialized");
+  }
+  hal_.submit_control(request);
+  last_job_id_ = request.job_id;
+}
+
+ControlReply Runtime::read_control_result(const std::string& job_id) {
+  if (!initialized_) {
+    throw RuntimeError("runtime is not initialized");
+  }
+  return hal_.read_control_result(job_id);
+}
+
 void Runtime::shutdown() {
   hal_.shutdown();
   initialized_ = false;
