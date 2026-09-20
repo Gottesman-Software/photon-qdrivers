@@ -13,6 +13,6 @@ recursive-include docs *.md *.mmd *.png *.svg *.json
 recursive-include docs/examples *.py
 exclude docs/strategic.md
 exclude docs/hardware_lab.md
-recursive-include fpga *.cpp *.f *.hex *.hpp *.md *.sv
+recursive-include fpga *.cpp *.f *.hex *.hpp *.json *.md *.py *.sv
 recursive-include plugins *.md
 recursive-include tests *.py

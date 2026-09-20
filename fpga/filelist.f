@@ -2,6 +2,7 @@ fpga/systemverilog/photon_qdriver_pkg.sv
 fpga/systemverilog/control_instruction_decoder.sv
 fpga/systemverilog/control_schedule_engine.sv
 fpga/systemverilog/red_pitaya_control_bridge.sv
+fpga/systemverilog/red_pitaya_sys_bus_adapter.sv
 fpga/systemverilog/pulse_scheduler.sv
 fpga/systemverilog/detector_readout.sv
 fpga/systemverilog/coincidence_counter.sv

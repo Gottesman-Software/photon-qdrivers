@@ -2,9 +2,10 @@
 
 The FPGA layer owns timing-critical schedule execution and detector accounting.
 P5 adds an instruction-level engine beside the earlier pulse-mask smoke path.
-P6.0 now exposes that engine through a fixed 32-bit MMIO contract intended for
-a Red Pitaya-side AXI bridge or daemon. It remains pre-synthesis and
-board-neutral at the electrical boundary.
+P6.0 exposes that engine through a fixed 32-bit MMIO contract. P6.1 adds an
+official Red Pitaya AXI-GP0 system-bus mapping and observation registers while
+leaving the P6.0 addresses unchanged. The implementation remains pre-synthesis
+and pre-deployment until reports and live-board evidence are captured.
 
 ## P6.0 MMIO Board Interface
 
@@ -89,15 +90,39 @@ model. Verilator lint covers the legacy top, P5 schedule engine, and P6.0 board
 wrapper.
 
 This establishes RTL simulation parity only. It does not establish synthesis,
-place-and-route timing, clock-domain crossing correctness, board IO, or optical
-accuracy.
+place-and-route timing, deployed board IO, or optical accuracy.
 
-## Physical-Board Work
+## P6.1 Red Pitaya Mapping
 
-P6.1 must add:
+`red_pitaya_sys_bus_adapter.sv` occupies system-bus slot 13 in the pinned
+official `logic` image. The Zynq PS reaches that slot through AXI-GP0 at
+physical base `0x40340000`. Both the adapter and schedule engine run on the
+official 125 MHz fabric clock, so one physical device tick is 8 ns. There is no
+clock-domain crossing inside this target.
 
-- an AXI mapping or deployed daemon connecting the P6.0 contract to a live Red
-  Pitaya address space;
-- clock-domain crossings, timing constraints, and reset sequencing;
-- board-specific pin and electrical constraints;
-- synthesized timing reports and a physical digital-loopback experiment.
+The official top already constrains the expansion connector. The P6.1 overlay
+drives the eight `exp_n_io`/DIO_N outputs from `pulse_active_mask` and samples
+the eight `exp_p_io`/DIO_P inputs as detector events. The first bench uses
+`DIO_N0 -> DIO_P4`. Observation-only registers are:
+
+| Offset | Meaning |
+| ---: | --- |
+| `0x5c` | physical-observation protocol (`0x00010000`) |
+| `0x60` | synthesized fabric clock in Hz |
+| `0x64` | first loopback-output rising tick |
+| `0x68` | first loopback-output falling tick |
+| `0x6c` | first loopback-input rising tick |
+| `0x70` | input-high cycles inside the acquisition window |
+| `0x74` | output-rise, output-fall, and input-rise seen flags |
+
+The P6.1 fixture deliberately drives output channel 0 over `[7, 11)` while a
+two-bit count acquisition observes input channel 4 over the same half-open
+interval. Simulation observes output rise 7, output fall 11, input rise 7,
+four high cycles, saturated count 3, overflow, and one dropped event.
+
+`RedPitayaMMIOBoard` verifies live capabilities, writes the exact P5 image,
+polls bounded status transitions, reads both result and observation registers,
+and emits `PQDR_PHYSICAL_EVIDENCE_V1`. That evidence binds the board/image
+digests to the deployed bitstream SHA-256, fabric clock, device ticks, and host
+round-trip time. It becomes physical evidence only after executing against a
+connected board; the current Icarus result remains simulation evidence.

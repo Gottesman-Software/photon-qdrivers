@@ -749,6 +749,8 @@ def encode_control_result_frame(
     envelope: ControlEnvelope,
     image: BoardProgramImage,
     result: BoardExecutionResult,
+    *,
+    message: str = "completed by P6.0 software board bridge",
 ) -> str:
     """Return a P4 result frame accepted by the existing native mailbox."""
 
@@ -767,6 +769,7 @@ def encode_control_result_frame(
         raise ControlValidationError(
             "Board image does not correlate with P4 envelope."
         )
+    _require_identifier(message, "Control-result message")
     record = result.acquisition_record()
     acquisition_payload = _canonical_json([record.to_dict()])
     acquisition_digest = _sha256(acquisition_payload)
@@ -790,7 +793,7 @@ def encode_control_result_frame(
         f"dropped_events={result.dropped_events}",
         f"acquisition_payload_length={len(acquisition_payload.encode('utf-8'))}",
         f"acquisition_payload={acquisition_payload}",
-        "message=completed by P6.0 software board bridge",
+        f"message={message}",
         "END",
         "",
     ]

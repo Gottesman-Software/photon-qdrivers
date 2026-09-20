@@ -16,6 +16,9 @@ SDK transport.
   masks, acquisition counting, saturation, and structured errors.
 - `systemverilog/red_pitaya_control_bridge.sv`: exposes the P5 engine through
   the fixed P6.0 32-bit MMIO capability, instruction, status, and result map.
+- `systemverilog/red_pitaya_sys_bus_adapter.sv`: maps that contract into one
+  official Red Pitaya AXI-GP0 system-bus slot and captures P6.1 loopback edge
+  ticks without changing the P6.0 addresses.
 - `systemverilog/pulse_scheduler.sv`: accepts pulse commands, enforces
   non-empty masks, holds pulses for a configurable number of cycles, and reports
   busy/error state.
@@ -32,6 +35,10 @@ SDK transport.
   execution, result-readback, capability, and read-only-write testbench.
 - `testbench/fixtures/p5_control_program.hex`: immutable six-instruction P5
   reference shared with Python and RTL tests.
+- `testbench/fixtures/p61_physical_loopback_program.hex`: 125 MHz physical
+  fixture that drives output channel 0 during detector channel 4's window.
+- `testbench/tb_red_pitaya_sys_bus_adapter.sv`: self-checking P6.1 system-bus,
+  pin-loopback, edge-timestamp, and saturation simulation.
 
 ## Simulation
 
@@ -67,6 +74,16 @@ vvp /tmp/tb_red_pitaya_control_bridge \
   +PROGRAM=fpga/testbench/fixtures/p5_control_program.hex
 ```
 
+The P6.1 AXI-system-bus and digital-loopback test is:
+
+```bash
+iverilog -g2012 -I fpga/systemverilog \
+  -o /tmp/tb_red_pitaya_sys_bus_adapter \
+  fpga/testbench/tb_red_pitaya_sys_bus_adapter.sv
+vvp /tmp/tb_red_pitaya_sys_bus_adapter \
+  +PROGRAM=fpga/testbench/fixtures/p61_physical_loopback_program.hex
+```
+
 When Verilator or Icarus Verilog are installed, CMake registers FPGA checks with
 CTest:
 
@@ -99,8 +116,11 @@ driver = Driver.load(
 
 This profile uses the shared mailbox protocol and reports the device as
 `red-pitaya-stemlab-125-14`. P6.0 supplies the verified board-program bridge and
-MMIO RTL wrapper. P6.1 must map the wrapper into a synthesized Red Pitaya image
-or a live board daemon.
+MMIO RTL wrapper. P6.1 now supplies a pinned official-project overlay, the
+AXI-GP0 system-bus mapping, `/dev/mem` execution, and evidence serialization.
+See [`red_pitaya/README.md`](red_pitaya/README.md). These components remain
+pre-synthesis and pre-deployment until their reports and physical evidence are
+captured on the named board.
 
 ## Host Mailbox Contract
 
@@ -120,9 +140,11 @@ result direction.
 
 ## Next Production Steps
 
-- Map the implemented P6.0 registers onto Red Pitaya AXI or a deployed board
-  daemon.
-- Add board-specific constraints for one selected board.
-- Add CDC rules if host and control logic use different clocks.
-- Execute the immutable P5 fixture through a Red Pitaya digital loopback and
-  compare physical timing, counts, overflow, and dropped events.
+- Run the pinned official build on Linux with Vivado 2025.1 and archive its
+  synthesis, utilization, implementation, and timing reports.
+- Load the resulting Z10 image on one STEMlab 125-14 and verify the live
+  identity, protocol, 125 MHz clock, capacity, and counter-width registers.
+- Wire `DIO_N0` to `DIO_P4`, execute the versioned P6.1 fixture, and archive the
+  digest-bound edge ticks, counts, overflow, dropped events, and host latency.
+- Compare those measurements with the simulation acceptance values before
+  changing the implementation matrix to physically validated.
