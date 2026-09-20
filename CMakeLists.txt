@@ -130,6 +130,19 @@ if(VERILATOR_EXECUTABLE)
       ${CMAKE_CURRENT_SOURCE_DIR}/fpga/filelist.f
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   )
+  add_test(
+    NAME fpga_red_pitaya_sys_bus_adapter_verilator_lint
+    COMMAND
+      ${VERILATOR_EXECUTABLE}
+      --lint-only
+      -sv
+      --top-module
+      red_pitaya_sys_bus_adapter
+      -I${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog
+      -f
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/filelist.f
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
 endif()
 
 find_program(IVERILOG_EXECUTABLE iverilog)
@@ -143,6 +156,10 @@ if(IVERILOG_EXECUTABLE AND VVP_EXECUTABLE)
   set(
     FPGA_RED_PITAYA_TESTBENCH_OUTPUT
     ${CMAKE_CURRENT_BINARY_DIR}/fpga/tb_red_pitaya_control_bridge.vvp
+  )
+  set(
+    FPGA_RED_PITAYA_SYS_BUS_TESTBENCH_OUTPUT
+    ${CMAKE_CURRENT_BINARY_DIR}/fpga/tb_red_pitaya_sys_bus_adapter.vvp
   )
 
   add_custom_command(
@@ -232,5 +249,39 @@ if(IVERILOG_EXECUTABLE AND VVP_EXECUTABLE)
       ${VVP_EXECUTABLE}
       ${FPGA_RED_PITAYA_TESTBENCH_OUTPUT}
       +PROGRAM=${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/fixtures/p5_control_program.hex
+  )
+
+  add_custom_command(
+    OUTPUT ${FPGA_RED_PITAYA_SYS_BUS_TESTBENCH_OUTPUT}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/fpga
+    COMMAND
+      ${IVERILOG_EXECUTABLE}
+      -g2012
+      -I
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog
+      -o
+      ${FPGA_RED_PITAYA_SYS_BUS_TESTBENCH_OUTPUT}
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/tb_red_pitaya_sys_bus_adapter.sv
+    DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/tb_red_pitaya_sys_bus_adapter.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/fixtures/p61_physical_loopback_program.hex
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/photon_qdriver_pkg.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/control_instruction_decoder.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/control_schedule_engine.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/red_pitaya_control_bridge.sv
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga/systemverilog/red_pitaya_sys_bus_adapter.sv
+    VERBATIM
+  )
+
+  add_custom_target(
+    fpga_tb_red_pitaya_sys_bus_adapter ALL
+    DEPENDS ${FPGA_RED_PITAYA_SYS_BUS_TESTBENCH_OUTPUT}
+  )
+  add_test(
+    NAME fpga_tb_red_pitaya_sys_bus_adapter
+    COMMAND
+      ${VVP_EXECUTABLE}
+      ${FPGA_RED_PITAYA_SYS_BUS_TESTBENCH_OUTPUT}
+      +PROGRAM=${CMAKE_CURRENT_SOURCE_DIR}/fpga/testbench/fixtures/p61_physical_loopback_program.hex
   )
 endif()

@@ -30,6 +30,20 @@ from .native_protocol import (
     decode_acquisition_payload,
 )
 from .profile import HardwareProfile, QuantizationRule
+from .physical_bench import (
+    RED_PITAYA_PHYSICAL_LOOPBACK_CHANNEL_MAP,
+    red_pitaya_physical_loopback_envelope,
+)
+from .red_pitaya import (
+    PHYSICAL_EVIDENCE_PROTOCOL,
+    PHYSICAL_REGISTER_MAP,
+    RED_PITAYA_DEFAULT_BASE_ADDRESS,
+    DevMemRegisterIO,
+    PhysicalExecutionEvidence,
+    RedPitayaMMIOBoard,
+    RegisterIO,
+    sha256_file,
+)
 from .rtl import (
     RTL_INSTRUCTION_FORMAT_VERSION,
     RTL_INSTRUCTION_SCHEMA_VERSION,
@@ -86,6 +100,10 @@ __all__ = [
     "BOARD_PROGRAM_PROTOCOL",
     "BOARD_REGISTER_MAP",
     "BOARD_RESULT_PROTOCOL",
+    "PHYSICAL_EVIDENCE_PROTOCOL",
+    "PHYSICAL_REGISTER_MAP",
+    "RED_PITAYA_DEFAULT_BASE_ADDRESS",
+    "RED_PITAYA_PHYSICAL_LOOPBACK_CHANNEL_MAP",
     "AcquisitionKind",
     "AcquisitionRecord",
     "AnalyticLoopbackConfig",
@@ -93,6 +111,7 @@ __all__ = [
     "BoardCapabilities",
     "BoardExecutionResult",
     "BoardProgramImage",
+    "DevMemRegisterIO",
     "ChannelRole",
     "CompiledControlEvent",
     "CompiledControlProgram",
@@ -118,6 +137,9 @@ __all__ = [
     "ResourceUsage",
     "LoopbackPath",
     "P6BoardBridge",
+    "PhysicalExecutionEvidence",
+    "RedPitayaMMIOBoard",
+    "RegisterIO",
     "SweepTargetKind",
     "SoftwareBoard",
     "TraceEvent",
@@ -133,4 +155,6 @@ __all__ = [
     "encode_control_request_frame",
     "encode_control_result_frame",
     "quantize_time_ns",
+    "red_pitaya_physical_loopback_envelope",
+    "sha256_file",
 ]

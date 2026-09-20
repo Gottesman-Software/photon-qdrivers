@@ -17,7 +17,13 @@ module red_pitaya_control_bridge #(
     output logic mmio_error,
 
     input  logic [CHANNELS-1:0] detector_events,
-    output logic [CHANNELS-1:0] pulse_active_mask
+    output logic [CHANNELS-1:0] pulse_active_mask,
+
+    // P6.1 observation-only signals.  These do not change the P6.0 MMIO map;
+    // the physical-board adapter uses them to timestamp pin-level loopback.
+    output logic [31:0] device_tick_observe,
+    output logic engine_busy_observe,
+    output logic acquisition_active_observe
 );
 
     localparam logic [7:0] REG_IDENTITY               = 8'h00;
@@ -87,6 +93,9 @@ module red_pitaya_control_bridge #(
     };
     assign mmio_ready = mmio_valid;
     assign mmio_error = mmio_error_latched;
+    assign device_tick_observe = device_tick;
+    assign engine_busy_observe = engine_busy;
+    assign acquisition_active_observe = acquisition_active;
 
     always_comb begin
         mmio_read_data = 32'h00000000;

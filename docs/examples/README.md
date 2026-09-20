@@ -15,6 +15,8 @@ python docs/examples/run_dynamiqs_dynamics.py
 python docs/examples/run_strawberryfields_legacy.py
 python docs/examples/run_native_runtime.py
 python docs/examples/run_red_pitaya_control_loopback.py
+python docs/examples/create_red_pitaya_physical_loopback_request.py \
+  /tmp/control_request.frame
 ```
 
 Use Python 3.12+ for modern emulator examples such as Dynamiqs. Use Python 3.10
@@ -32,3 +34,9 @@ python docs/examples/run_red_pitaya_control_loopback.py
 The Red Pitaya control example uses temporary mailbox files and the deterministic
 software bridge. It demonstrates the public framing and normalization path; it
 does not communicate with a physical board.
+
+The request-creation example emits the versioned 125 MHz P6.1 program that
+drives `DIO_N0` during the `DIO_P4` acquisition window. It creates a request
+only; synthesis, image deployment, safe jumper installation, and the
+board-side `qdriver-red-pitaya` command are documented in
+`fpga/red_pitaya/README.md`.

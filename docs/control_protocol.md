@@ -114,3 +114,17 @@ This contract and its simulation tests establish host framing, digest
 correlation, instruction-level execution, and MMIO readback. They do not prove
 synthesis, place-and-route timing, physical board IO, transport latency, analog
 signal fidelity, detector calibration, or optical correctness.
+
+## P6.1 Physical Evidence Extension
+
+P6.1 preserves every P6.0 address and adds observation-only registers from
+`0x5c` through `0x74` for the physical protocol version, fabric clock, output
+rise/fall ticks, input rise tick, high-cycle count, and seen flags. The
+board-side `RedPitayaMMIOBoard` verifies the live P6.0 capabilities before
+loading any image and emits `PQDR_PHYSICAL_EVIDENCE_V1` after a successful run.
+
+Physical evidence additionally binds the `PQDR_BOARD_RESULT_V1` digest to the
+deployed bitstream SHA-256, MMIO base address, 125 MHz clock, pin-channel
+mapping, device-edge ticks, and host round-trip time. A locally constructed
+evidence object or an HDL simulation does not establish that the FPGA was
+synthesized, programmed, or electrically looped back.

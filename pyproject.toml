@@ -32,6 +32,9 @@ Repository = "https://github.com/denniswayo/photon-qdrivers"
 Issues = "https://github.com/denniswayo/photon-qdrivers/issues"
 Documentation = "https://github.com/denniswayo/photon-qdrivers/tree/main/docs"
 
+[project.scripts]
+qdriver-red-pitaya = "photon_qdrivers.control.red_pitaya_daemon:main"
+
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 perceval = ["perceval-quandela>=1.2"]
