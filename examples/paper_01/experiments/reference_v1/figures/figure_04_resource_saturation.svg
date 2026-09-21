@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="500" viewBox="0 0 1080 500" role="img">
+<title>Finite-resource saturation behavior</title>
+<rect width="1080" height="500" fill="#ffffff"/>
+<style>text{font-family:"DejaVu Sans",Arial,sans-serif;fill:#20262d}.axis{stroke:#20262d;stroke-width:1.2}.grid{stroke:#d9dde2;stroke-width:1}.tick{font-size:13px}.label{font-size:15px;font-weight:600}.panel-title{font-size:18px;font-weight:700}.figure-title{font-size:22px;font-weight:700}.legend{font-size:13px}</style>
+<line x1="265" y1="18" x2="295" y2="18" stroke="#235789" stroke-width="2.6"/>
+<text x="303" y="23" class="legend">Recorded</text>
+<line x1="460" y1="18" x2="490" y2="18" stroke="#d95f02" stroke-width="2.6"/>
+<text x="498" y="23" class="legend">Dropped</text>
+<line x1="655" y1="18" x2="685" y2="18" stroke="#5f6770" stroke-width="2.6"/>
+<text x="693" y="23" class="legend">Capacity</text>
+<line x1="74" y1="422.000" x2="512" y2="422.000" class="grid"/>
+<text x="64" y="426.000" text-anchor="end" class="tick">0</text>
+<line x1="74" y1="330.431" x2="512" y2="330.431" class="grid"/>
+<text x="64" y="334.431" text-anchor="end" class="tick">128</text>
+<line x1="74" y1="238.862" x2="512" y2="238.862" class="grid"/>
+<text x="64" y="242.862" text-anchor="end" class="tick">256</text>
+<line x1="74" y1="147.292" x2="512" y2="147.292" class="grid"/>
+<text x="64" y="151.292" text-anchor="end" class="tick">384</text>
+<line x1="74" y1="55.723" x2="512" y2="55.723" class="grid"/>
+<text x="64" y="59.723" text-anchor="end" class="tick">512</text>
+<text x="74.000" y="445" text-anchor="middle" class="tick">64</text>
+<text x="136.571" y="445" text-anchor="middle" class="tick">128</text>
+<text x="261.714" y="445" text-anchor="middle" class="tick">256</text>
+<text x="386.857" y="445" text-anchor="middle" class="tick">384</text>
+<text x="512.000" y="445" text-anchor="middle" class="tick">512</text>
+<line x1="74" y1="50" x2="74" y2="422" class="axis"/>
+<line x1="74" y1="422" x2="512" y2="422" class="axis"/>
+<text x="293.0" y="472" text-anchor="middle" class="label">Requested events</text>
+<text x="27" y="236.0" text-anchor="middle" transform="rotate(-90 27 236.0)" class="label">Events</text>
+<polyline points="74.000,376.215 136.571,330.431 260.737,239.577 261.714,239.577 386.857,239.577 512.000,239.577" fill="none" stroke="#235789" stroke-width="2.6"/>
+<circle cx="74.000" cy="376.215" r="3.8" fill="#235789"/>
+<circle cx="136.571" cy="330.431" r="3.8" fill="#235789"/>
+<circle cx="260.737" cy="239.577" r="3.8" fill="#235789"/>
+<circle cx="261.714" cy="239.577" r="3.8" fill="#235789"/>
+<circle cx="386.857" cy="239.577" r="3.8" fill="#235789"/>
+<circle cx="512.000" cy="239.577" r="3.8" fill="#235789"/>
+<polyline points="74.000,422.000 136.571,422.000 260.737,422.000 261.714,421.285 386.857,329.715 512.000,238.146" fill="none" stroke="#d95f02" stroke-width="2.6"/>
+<circle cx="74.000" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="136.571" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="260.737" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="261.714" cy="421.285" r="3.8" fill="#d95f02"/>
+<circle cx="386.857" cy="329.715" r="3.8" fill="#d95f02"/>
+<circle cx="512.000" cy="238.146" r="3.8" fill="#d95f02"/>
+<polyline points="74.000,239.577 136.571,239.577 260.737,239.577 261.714,239.577 386.857,239.577 512.000,239.577" fill="none" stroke="#5f6770" stroke-width="2.6"/>
+<circle cx="74.000" cy="239.577" r="3.8" fill="#5f6770"/>
+<circle cx="136.571" cy="239.577" r="3.8" fill="#5f6770"/>
+<circle cx="260.737" cy="239.577" r="3.8" fill="#5f6770"/>
+<circle cx="261.714" cy="239.577" r="3.8" fill="#5f6770"/>
+<circle cx="386.857" cy="239.577" r="3.8" fill="#5f6770"/>
+<circle cx="512.000" cy="239.577" r="3.8" fill="#5f6770"/>
+<line x1="609" y1="422.000" x2="1047" y2="422.000" class="grid"/>
+<text x="599" y="426.000" text-anchor="end" class="tick">0</text>
+<line x1="609" y1="330.431" x2="1047" y2="330.431" class="grid"/>
+<text x="599" y="334.431" text-anchor="end" class="tick">128</text>
+<line x1="609" y1="238.862" x2="1047" y2="238.862" class="grid"/>
+<text x="599" y="242.862" text-anchor="end" class="tick">256</text>
+<line x1="609" y1="147.292" x2="1047" y2="147.292" class="grid"/>
+<text x="599" y="151.292" text-anchor="end" class="tick">384</text>
+<line x1="609" y1="55.723" x2="1047" y2="55.723" class="grid"/>
+<text x="599" y="59.723" text-anchor="end" class="tick">512</text>
+<text x="609.000" y="445" text-anchor="middle" class="tick">64</text>
+<text x="671.571" y="445" text-anchor="middle" class="tick">128</text>
+<text x="796.714" y="445" text-anchor="middle" class="tick">256</text>
+<text x="921.857" y="445" text-anchor="middle" class="tick">384</text>
+<text x="1047.000" y="445" text-anchor="middle" class="tick">512</text>
+<line x1="609" y1="50" x2="609" y2="422" class="axis"/>
+<line x1="609" y1="422" x2="1047" y2="422" class="axis"/>
+<text x="828.0" y="472" text-anchor="middle" class="label">Requested events</text>
+<text x="562" y="236.0" text-anchor="middle" transform="rotate(-90 562 236.0)" class="label">Events</text>
+<polyline points="609.000,376.215 671.571,330.431 795.737,330.431 796.714,330.431 921.857,330.431 1047.000,330.431" fill="none" stroke="#235789" stroke-width="2.6"/>
+<circle cx="609.000" cy="376.215" r="3.8" fill="#235789"/>
+<circle cx="671.571" cy="330.431" r="3.8" fill="#235789"/>
+<circle cx="795.737" cy="330.431" r="3.8" fill="#235789"/>
+<circle cx="796.714" cy="330.431" r="3.8" fill="#235789"/>
+<circle cx="921.857" cy="330.431" r="3.8" fill="#235789"/>
+<circle cx="1047.000" cy="330.431" r="3.8" fill="#235789"/>
+<polyline points="609.000,422.000 671.571,422.000 795.737,331.146 796.714,330.431 921.857,238.862 1047.000,147.292" fill="none" stroke="#d95f02" stroke-width="2.6"/>
+<circle cx="609.000" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="671.571" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="795.737" cy="331.146" r="3.8" fill="#d95f02"/>
+<circle cx="796.714" cy="330.431" r="3.8" fill="#d95f02"/>
+<circle cx="921.857" cy="238.862" r="3.8" fill="#d95f02"/>
+<circle cx="1047.000" cy="147.292" r="3.8" fill="#d95f02"/>
+<polyline points="609.000,330.431 671.571,330.431 795.737,330.431 796.714,330.431 921.857,330.431 1047.000,330.431" fill="none" stroke="#5f6770" stroke-width="2.6"/>
+<circle cx="609.000" cy="330.431" r="3.8" fill="#5f6770"/>
+<circle cx="671.571" cy="330.431" r="3.8" fill="#5f6770"/>
+<circle cx="795.737" cy="330.431" r="3.8" fill="#5f6770"/>
+<circle cx="796.714" cy="330.431" r="3.8" fill="#5f6770"/>
+<circle cx="921.857" cy="330.431" r="3.8" fill="#5f6770"/>
+<circle cx="1047.000" cy="330.431" r="3.8" fill="#5f6770"/>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "coincidence_boundary_exact": true,
+    "loss_error_within_limit": true,
+    "phase_error_within_limit": true,
+    "repeatability_exact": true,
+    "saturation_exact": true,
+    "timing_boundary_exact": true
+  },
+  "loss_error_limit": 0.025,
+  "loss_max_absolute_error": 0.004863281249999907,
+  "phase_error_limit": 0.04,
+  "phase_max_absolute_error": 0.02047004690672627
+}

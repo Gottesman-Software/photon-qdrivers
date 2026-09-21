@@ -1,0 +1,115 @@
+{
+  "board_image_digest": "15bedd5bff2026d6ffa87f0260461fb1ecb5f70eb4eb4b6596f2b947cdefa46f",
+  "board_result_digest": "3cce21e8e04d1171d3dee8153972c950bc8cb0b0223fd253c5b959ea19d56e4e",
+  "capabilities": {
+    "board_id": "red-pitaya-stemlab-125-14",
+    "channel_count": 8,
+    "count_acquisition": true,
+    "count_width_bits": 2,
+    "instruction_format_version": 1,
+    "instruction_width_bits": 128,
+    "max_instructions": 16,
+    "protocol": "PQDR_BOARD_CAPABILITIES_V1",
+    "register_map": {
+      "acquisition_channel": 88,
+      "acquisition_count": 48,
+      "acquisition_end_tick": 84,
+      "acquisition_start_tick": 80,
+      "channel_count": 16,
+      "control": 24,
+      "count_width": 20,
+      "device_tick": 44,
+      "dropped_events": 52,
+      "error_code": 32,
+      "identity": 0,
+      "instruction_count": 40,
+      "instruction_width": 8,
+      "instruction_word_0": 76,
+      "instruction_word_1": 72,
+      "instruction_word_2": 68,
+      "instruction_word_3": 64,
+      "max_instructions": 12,
+      "protocol_version": 4,
+      "pulse_active_mask": 60,
+      "repetition_ticks": 36,
+      "result_flags": 56,
+      "status": 28
+    },
+    "shots_in_rtl": false,
+    "sweeps_in_rtl": false
+  },
+  "capability_digest": "bdc06130aa567cf9ee69136aeaec9db2929a04b91e30ef53c641e8acbefafc2e",
+  "claim_boundary": "P6.0 software/native framing and Icarus register-interface parity; not synthesis, deployed Red Pitaya IO, measured timing, or optical evidence.",
+  "compiled_program_digest": "dd06e2522e21242edf24a9f782044407c5e8952444551f426e688a7acf54e025",
+  "control_envelope_digest": "a0197687db44274a312df0a06ef852305dade25befd77f22c85625a8c6636a11",
+  "exact_software_rtl_result_match": true,
+  "p4_result_acquisition": {
+    "acquisition_id": "p6-counts",
+    "dropped_events": 1,
+    "end_tick": 11,
+    "kind": "counts",
+    "metadata": {
+      "board_id": "red-pitaya-stemlab-125-14",
+      "board_image_digest": "15bedd5bff2026d6ffa87f0260461fb1ecb5f70eb4eb4b6596f2b947cdefa46f",
+      "board_result_digest": "3cce21e8e04d1171d3dee8153972c950bc8cb0b0223fd253c5b959ea19d56e4e",
+      "capability_digest": "bdc06130aa567cf9ee69136aeaec9db2929a04b91e30ef53c641e8acbefafc2e",
+      "error_code": 0,
+      "execution_target": "p6-software-board-model",
+      "final_device_tick": 11,
+      "rtl_program_digest": "b952907d383bc77def9d4fdff577fce4c3e2da317e2c12862c6e3519b4385066"
+    },
+    "overflow": true,
+    "payload": {
+      "channel_4": 3
+    },
+    "shape": [
+      1
+    ],
+    "start_tick": 7,
+    "unit": "events"
+  },
+  "rtl_program_digest": "b952907d383bc77def9d4fdff577fce4c3e2da317e2c12862c6e3519b4385066",
+  "rtl_register_observations": {
+    "capabilities": {
+      "channel_count": 8,
+      "count_width_bits": 2,
+      "instruction_width_bits": 128,
+      "max_instructions": 16
+    },
+    "fault": {
+      "read_only_write": 128
+    },
+    "result": {
+      "acquisition_channel": 4,
+      "acquisition_end_tick": 11,
+      "acquisition_start_tick": 7,
+      "dropped_events": 1,
+      "final_device_tick": 11,
+      "instruction_count": 6,
+      "overflow": 1,
+      "recorded_events": 3
+    }
+  },
+  "schema_version": "qdriverlab.p6-board-bridge.v1",
+  "software_result": {
+    "acquisition_channel": 4,
+    "acquisition_end_tick": 11,
+    "acquisition_id": "p6-counts",
+    "acquisition_start_tick": 7,
+    "board_id": "red-pitaya-stemlab-125-14",
+    "capability_digest": "bdc06130aa567cf9ee69136aeaec9db2929a04b91e30ef53c641e8acbefafc2e",
+    "dropped_events": 1,
+    "error_code": 0,
+    "execution_target": "p6-software-board-model",
+    "final_device_tick": 11,
+    "image_digest": "15bedd5bff2026d6ffa87f0260461fb1ecb5f70eb4eb4b6596f2b947cdefa46f",
+    "instruction_count": 6,
+    "job_id": "p6-board-reference-job",
+    "overflow": true,
+    "protocol": "PQDR_BOARD_RESULT_V1",
+    "recorded_events": 3,
+    "result_digest": "3cce21e8e04d1171d3dee8153972c950bc8cb0b0223fd253c5b959ea19d56e4e",
+    "rtl_program_digest": "b952907d383bc77def9d4fdff577fce4c3e2da317e2c12862c6e3519b4385066"
+  },
+  "suite_id": "qdriverlab-p6-board-reference-v1"
+}

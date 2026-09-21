@@ -1,0 +1,11 @@
+{
+  "files": {
+    "program.hex": "ca5830ba99e0803843d95598c03bf508c92b416798ae80f837dadb3d05c2786c",
+    "rtl_parity.json": "aff1b5d9110d12a1cf72516d1510ea38ff19fb7d06d9cf5007b08566486b87b6"
+  },
+  "fpga_fixture_sha256": "ca5830ba99e0803843d95598c03bf508c92b416798ae80f837dadb3d05c2786c",
+  "generator_sha256": "184cb36bee589a19dafe25bd8b0e1f63c69de520423405d41f908e8d3a61da34",
+  "schema_version": "qdriverlab.rtl-reference-manifest.v1",
+  "suite_digest": "2df96e950badb9c0b66e66dd56716ad515b3a3887172ac7d28eab062473bde2c",
+  "suite_id": "qdriverlab-rtl-reference-v1"
+}
