@@ -1,0 +1,14 @@
+{
+  "files": {
+    "board_program.frame": "515451a8fcb643a3ff497522b661b515fb80f436df646544b430b81ab68f1a4c",
+    "board_result.frame": "6b4c79cf621884179379be250c90bdda842b84e87c538ee7266a3c1dd7f3f907",
+    "bridge_summary.json": "c81177f8fd984069f049c0d8d900a57203b3baa389fdf7e9f34939733a11bf23",
+    "control_request.frame": "b642a4663203c1b3adbc2b4f0c559d0ffcd7fb1d87f389ebc7f2dd366873a9d4",
+    "control_result.frame": "28fdba237287a95bb055e48405123151de4b6bb60d7450e6b5083603c00bbbaa"
+  },
+  "fpga_fixture_sha256": "ca5830ba99e0803843d95598c03bf508c92b416798ae80f837dadb3d05c2786c",
+  "generator_sha256": "0f5295b18f3f4f741709a66c0935779843acb4853f1b81c06670e6ea3749b7fe",
+  "schema_version": "qdriverlab.p6-board-reference-manifest.v1",
+  "suite_digest": "9af7dfd6091f57763a0fa097938dc0eb3e5255095304f2cb687b5b38d229b1e5",
+  "suite_id": "qdriverlab-p6-board-reference-v1"
+}

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="500" viewBox="0 0 1080 500" role="img">
+<title>Device-tick boundary behavior</title>
+<rect width="1080" height="500" fill="#ffffff"/>
+<style>text{font-family:"DejaVu Sans",Arial,sans-serif;fill:#20262d}.axis{stroke:#20262d;stroke-width:1.2}.grid{stroke:#d9dde2;stroke-width:1}.tick{font-size:13px}.label{font-size:15px;font-weight:600}.panel-title{font-size:18px;font-weight:700}.figure-title{font-size:22px;font-weight:700}.legend{font-size:13px}</style>
+<line x1="370" y1="18" x2="400" y2="18" stroke="#235789" stroke-width="2.6"/>
+<text x="408" y="23" class="legend">Observed</text>
+<line x1="560" y1="18" x2="590" y2="18" stroke="#d95f02" stroke-width="2.6"/>
+<text x="598" y="23" class="legend">Expected</text>
+<line x1="74" y1="422.000" x2="512" y2="422.000" class="grid"/>
+<text x="64" y="426.000" text-anchor="end" class="tick">0</text>
+<line x1="74" y1="244.857" x2="512" y2="244.857" class="grid"/>
+<text x="64" y="248.857" text-anchor="end" class="tick">0.5</text>
+<line x1="74" y1="67.714" x2="512" y2="67.714" class="grid"/>
+<text x="64" y="71.714" text-anchor="end" class="tick">1</text>
+<text x="74.000" y="445" text-anchor="middle" class="tick">0</text>
+<text x="136.571" y="445" text-anchor="middle" class="tick">2</text>
+<text x="199.143" y="445" text-anchor="middle" class="tick">4</text>
+<text x="261.714" y="445" text-anchor="middle" class="tick">6</text>
+<text x="324.286" y="445" text-anchor="middle" class="tick">8</text>
+<text x="386.857" y="445" text-anchor="middle" class="tick">10</text>
+<text x="449.429" y="445" text-anchor="middle" class="tick">12</text>
+<text x="512.000" y="445" text-anchor="middle" class="tick">14</text>
+<line x1="74" y1="50" x2="74" y2="422" class="axis"/>
+<line x1="74" y1="422" x2="512" y2="422" class="axis"/>
+<text x="293.0" y="472" text-anchor="middle" class="label">Path delay (ticks)</text>
+<text x="27" y="236.0" text-anchor="middle" transform="rotate(-90 27 236.0)" class="label">Detection probability</text>
+<polyline points="74.000,422.000 105.286,422.000 136.571,422.000 167.857,422.000 199.143,67.714 230.429,67.714 261.714,67.714 293.000,67.714 324.286,67.714 355.571,67.714 386.857,422.000 418.143,422.000 449.429,422.000 480.714,422.000 512.000,422.000" fill="none" stroke="#d95f02" stroke-width="4.6"/>
+<circle cx="74.000" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="105.286" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="136.571" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="167.857" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="199.143" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="230.429" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="261.714" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="293.000" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="324.286" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="355.571" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="386.857" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="418.143" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="449.429" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="480.714" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="512.000" cy="422.000" r="3.8" fill="#d95f02"/>
+<polyline points="74.000,422.000 105.286,422.000 136.571,422.000 167.857,422.000 199.143,67.714 230.429,67.714 261.714,67.714 293.000,67.714 324.286,67.714 355.571,67.714 386.857,422.000 418.143,422.000 449.429,422.000 480.714,422.000 512.000,422.000" fill="none" stroke="#235789" stroke-width="2.6"/>
+<circle cx="74.000" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="105.286" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="136.571" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="167.857" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="199.143" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="230.429" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="261.714" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="293.000" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="324.286" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="355.571" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="386.857" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="418.143" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="449.429" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="480.714" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="512.000" cy="422.000" r="3.8" fill="#235789"/>
+<line x1="609" y1="422.000" x2="1047" y2="422.000" class="grid"/>
+<text x="599" y="426.000" text-anchor="end" class="tick">0</text>
+<line x1="609" y1="244.857" x2="1047" y2="244.857" class="grid"/>
+<text x="599" y="248.857" text-anchor="end" class="tick">0.5</text>
+<line x1="609" y1="67.714" x2="1047" y2="67.714" class="grid"/>
+<text x="599" y="71.714" text-anchor="end" class="tick">1</text>
+<text x="609.000" y="445" text-anchor="middle" class="tick">0</text>
+<text x="682.000" y="445" text-anchor="middle" class="tick">1</text>
+<text x="755.000" y="445" text-anchor="middle" class="tick">2</text>
+<text x="828.000" y="445" text-anchor="middle" class="tick">3</text>
+<text x="901.000" y="445" text-anchor="middle" class="tick">4</text>
+<text x="974.000" y="445" text-anchor="middle" class="tick">5</text>
+<text x="1047.000" y="445" text-anchor="middle" class="tick">6</text>
+<line x1="609" y1="50" x2="609" y2="422" class="axis"/>
+<line x1="609" y1="422" x2="1047" y2="422" class="axis"/>
+<text x="828.0" y="472" text-anchor="middle" class="label">Coincidence window (ticks)</text>
+<text x="562" y="236.0" text-anchor="middle" transform="rotate(-90 562 236.0)" class="label">Coincidence probability</text>
+<polyline points="609.000,422.000 682.000,422.000 755.000,422.000 828.000,67.714 901.000,67.714 974.000,67.714 1047.000,67.714" fill="none" stroke="#d95f02" stroke-width="4.6"/>
+<circle cx="609.000" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="682.000" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="755.000" cy="422.000" r="3.8" fill="#d95f02"/>
+<circle cx="828.000" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="901.000" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="974.000" cy="67.714" r="3.8" fill="#d95f02"/>
+<circle cx="1047.000" cy="67.714" r="3.8" fill="#d95f02"/>
+<polyline points="609.000,422.000 682.000,422.000 755.000,422.000 828.000,67.714 901.000,67.714 974.000,67.714 1047.000,67.714" fill="none" stroke="#235789" stroke-width="2.6"/>
+<circle cx="609.000" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="682.000" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="755.000" cy="422.000" r="3.8" fill="#235789"/>
+<circle cx="828.000" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="901.000" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="974.000" cy="67.714" r="3.8" fill="#235789"/>
+<circle cx="1047.000" cy="67.714" r="3.8" fill="#235789"/>
+</svg>

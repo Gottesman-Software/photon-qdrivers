@@ -1,0 +1,134 @@
+{
+  "acquisition_summary": {
+    "dropped_events": 1,
+    "final_device_tick": 11,
+    "overflow": 1,
+    "recorded_events": 3
+  },
+  "claim_boundary": "Instruction-level Icarus Verilog parity; not synthesis, place-and-route, board timing, or physical photonic validation.",
+  "compiled_program_digest": "08435a95bb6f1083e7931d432e74f616f67f7926609ca08aceb9d20b3525a88b",
+  "exact_schedule_match": true,
+  "expected_observations": [
+    {
+      "acquisition_code": 0,
+      "argument_word": 4294967295,
+      "channel_index": 0,
+      "duration_ticks": 2,
+      "index": 0,
+      "opcode": 1,
+      "start_tick": 1
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 2147483648,
+      "channel_index": 1,
+      "duration_ticks": 3,
+      "index": 1,
+      "opcode": 2,
+      "start_tick": 2
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 2147483648,
+      "channel_index": 2,
+      "duration_ticks": 0,
+      "index": 2,
+      "opcode": 3,
+      "start_tick": 2
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 0,
+      "channel_index": 3,
+      "duration_ticks": 0,
+      "index": 3,
+      "opcode": 4,
+      "start_tick": 4
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 0,
+      "channel_index": 3,
+      "duration_ticks": 1,
+      "index": 4,
+      "opcode": 5,
+      "start_tick": 5
+    },
+    {
+      "acquisition_code": 3,
+      "argument_word": 0,
+      "channel_index": 4,
+      "duration_ticks": 4,
+      "index": 5,
+      "opcode": 6,
+      "start_tick": 7
+    }
+  ],
+  "fault_error_codes": {
+    "acquisition_kind": 5,
+    "format_version": 1,
+    "unsorted": 6
+  },
+  "instruction_count": 6,
+  "observed_observations": [
+    {
+      "acquisition_code": 0,
+      "argument_word": 4294967295,
+      "channel_index": 0,
+      "duration_ticks": 2,
+      "index": 0,
+      "opcode": 1,
+      "start_tick": 1
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 2147483648,
+      "channel_index": 1,
+      "duration_ticks": 3,
+      "index": 1,
+      "opcode": 2,
+      "start_tick": 2
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 2147483648,
+      "channel_index": 2,
+      "duration_ticks": 0,
+      "index": 2,
+      "opcode": 3,
+      "start_tick": 2
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 0,
+      "channel_index": 3,
+      "duration_ticks": 0,
+      "index": 3,
+      "opcode": 4,
+      "start_tick": 4
+    },
+    {
+      "acquisition_code": 0,
+      "argument_word": 0,
+      "channel_index": 3,
+      "duration_ticks": 1,
+      "index": 4,
+      "opcode": 5,
+      "start_tick": 5
+    },
+    {
+      "acquisition_code": 3,
+      "argument_word": 0,
+      "channel_index": 4,
+      "duration_ticks": 4,
+      "index": 5,
+      "opcode": 6,
+      "start_tick": 7
+    }
+  ],
+  "profile_digest": "83e3504226a779b15ec193568fc8d9942389cb52b8d27b6b1718c7941eb0285f",
+  "repetition_ticks": 12,
+  "rtl_program_digest": "c238ff7d47946df6db80e7ae2d28af4f49114a025fd3e48c6840045d2911e5f6",
+  "schema_version": "qdriverlab.rtl-parity.v1",
+  "suite_id": "qdriverlab-rtl-reference-v1"
+}

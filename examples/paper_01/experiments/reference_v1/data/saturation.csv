@@ -1,0 +1,13 @@
+resource,capacity,requested_events,recorded_events,dropped_events,overflow
+counter,255,64,64,0,false
+time_tag_buffer,128,64,64,0,false
+counter,255,128,128,0,false
+time_tag_buffer,128,128,128,0,false
+counter,255,255,255,0,false
+time_tag_buffer,128,255,128,127,true
+counter,255,256,255,1,true
+time_tag_buffer,128,256,128,128,true
+counter,255,384,255,129,true
+time_tag_buffer,128,384,128,256,true
+counter,255,512,255,257,true
+time_tag_buffer,128,512,128,384,true

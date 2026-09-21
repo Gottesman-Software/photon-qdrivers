@@ -1,0 +1,14 @@
+PQDR_CONTROL_V1
+job_id=p6-board-reference-job
+program_id=p6-board-reference-program
+profile_id=p6-board-profile
+profile_digest=7fdacca57a1d07de3e64b2640f7f0214ffdf74f2ab4ac00afd00f94284bc9591
+program_digest=dd06e2522e21242edf24a9f782044407c5e8952444551f426e688a7acf54e025
+envelope_digest=a0197687db44274a312df0a06ef852305dade25befd77f22c85625a8c6636a11
+shots=1
+repetition_ticks=12
+sweep_points=1
+event_count=6
+compiled_payload_length=1945
+compiled_payload={"events":[{"acquisition_id":null,"acquisition_kind":null,"channel":"source/0","duration_error_ns":0.0,"duration_ticks":2,"event_id":"source-trigger","kind":"source_trigger","parameters":{"amplitude":1.0},"start_error_ns":0.0,"start_tick":1},{"acquisition_id":null,"acquisition_kind":null,"channel":"modulator/0","duration_error_ns":0.0,"duration_ticks":3,"event_id":"modulator-pulse","kind":"modulator_pulse","parameters":{"amplitude":0.5},"start_error_ns":0.0,"start_tick":2},{"acquisition_id":null,"acquisition_kind":null,"channel":"phase/0","duration_error_ns":0.0,"duration_ticks":0,"event_id":"phase-update","kind":"phase_update","parameters":{"phase":3.141592653589793},"start_error_ns":0.0,"start_tick":2},{"acquisition_id":null,"acquisition_kind":null,"channel":"sync/0","duration_error_ns":0.0,"duration_ticks":0,"event_id":"sync-event","kind":"sync","parameters":{},"start_error_ns":0.0,"start_tick":4},{"acquisition_id":null,"acquisition_kind":null,"channel":"sync/0","duration_error_ns":0.0,"duration_ticks":1,"event_id":"delay-event","kind":"delay","parameters":{},"start_error_ns":0.0,"start_tick":5},{"acquisition_id":"p6-counts","acquisition_kind":"counts","channel":"detector/0","duration_error_ns":0.0,"duration_ticks":4,"event_id":"detector-window","kind":"acquire","parameters":{},"start_error_ns":0.0,"start_tick":7}],"profile_digest":"7fdacca57a1d07de3e64b2640f7f0214ffdf74f2ab4ac00afd00f94284bc9591","profile_id":"p6-board-profile","program_id":"p6-board-reference-program","provenance":{"clock_period_ns":1.0,"compiler":"photon_qdrivers.control.timing.v1","quantization_rule":"nearest","source":{"paper_suite":"qdriverlab-p6-board-reference-v1"},"source_schema":"photon-qdrivers.control.v1"},"repetition_ticks":12,"resource_usage":{"acquisition_ticks":4,"instructions":6,"program_ticks":12,"registers":0,"sweep_points":1,"waveform_samples":5},"schema_version":"photon-qdrivers.control.compiled.v1","shots":1,"sweeps":[]}
+END

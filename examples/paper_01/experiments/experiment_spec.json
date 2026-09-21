@@ -1,0 +1,42 @@
+{
+  "acceptance": {
+    "loss_max_absolute_error": 0.025,
+    "phase_max_absolute_error": 0.04
+  },
+  "coincidence_scan": {
+    "delay_a_ticks": 5,
+    "delay_b_ticks": 8,
+    "shots": 128,
+    "window_ticks": [0, 1, 2, 3, 4, 5, 6]
+  },
+  "loss_response": {
+    "detector_efficiency": 0.75,
+    "seeds": [101, 211, 307],
+    "shots_per_seed": 4096,
+    "source_amplitude": 0.8,
+    "transmissions": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+  },
+  "phase_fringe": {
+    "phase_over_pi": [0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1.0, 1.0625, 1.125, 1.1875, 1.25, 1.3125, 1.375, 1.4375, 1.5, 1.5625, 1.625, 1.6875, 1.75, 1.8125, 1.875, 1.9375, 2.0],
+    "seed": 20260827,
+    "shots": 2048
+  },
+  "repeatability": {
+    "seed": 731,
+    "shots": 1024,
+    "source_amplitude": 0.61
+  },
+  "saturation": {
+    "counter_bits": 8,
+    "event_counts": [64, 128, 255, 256, 384, 512],
+    "time_tag_buffer_capacity": 128
+  },
+  "schema_version": "qdriverlab.paper01.experiments.v1",
+  "suite_id": "qdriverlab-reference-v1",
+  "timing_boundary": {
+    "delay_ticks": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+    "shots": 128,
+    "window_duration_ticks": 6,
+    "window_start_tick": 4
+  }
+}

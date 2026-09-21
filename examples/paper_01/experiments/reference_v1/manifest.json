@@ -1,0 +1,35 @@
+{
+  "files": {
+    "data/coincidence_window.csv": "872d9f1417ab45f2db88334ddfa4a6475ba36565ab006ca11e293177c410ba42",
+    "data/loss_response.csv": "d0719c1fb9c7c20db7ace288eaa957efb2f17f062ea39afc37b10fe07c2ba06e",
+    "data/phase_fringe.csv": "044744219fbfd15e140195f0ba36e4847ac2b24b6f78376311233d28d8541a0a",
+    "data/repeatability.json": "06f24d81434890334953fdcfef1c3d0838b3bdae528698df049e3341aaf997f8",
+    "data/saturation.csv": "f72322499d6f379bc630e43b72f0f6b54d0b382c612699394d631f645a4ce0a9",
+    "data/summary.json": "fb2925423b1d55fcb099f08ee75e88b56842596174173ca4d4d24ad7aac255b5",
+    "data/timing_boundary.csv": "dd268971be7d9e32eb73ead0cc1d1ce370542940a7aca2bd8ce66065916ca1f1",
+    "figures/figure_01_phase_fringe.svg": "95469c8ddb6453de66c15dc3ebec471ca780a33907306a34ecaa416f2757f08f",
+    "figures/figure_02_loss_response.svg": "fab871eb038a71a1f2afaa18ce0f85972eae4679fd853e1d202b943645effd42",
+    "figures/figure_03_timing_and_coincidence.svg": "700a5e16278a5cda0bc68d90bdb607fbe29fac854cfeaee6778f6f3c2bc13913",
+    "figures/figure_04_resource_saturation.svg": "988bf1da23637e1ed05ec5ddd20e246869900bad242d5935a06de4e0f7e83236"
+  },
+  "generator_digest": "ffebb18472f669a68619fc0b42199bc99fb7eaa4d512e3d4fc54c84297618e11",
+  "model_id": "photon_qdrivers.control.analytic_loopback.v1",
+  "schema_version": "qdriverlab.paper01.manifest.v1",
+  "spec_digest": "ef0c646495b9c2c79a4355711fe174b84c2161626e9073005465d8fac82a45f0",
+  "suite_digest": "9f33a114bb2d6268909c5e67bc73e64dcdd851815eacb9a216c069b484a428be",
+  "suite_id": "qdriverlab-reference-v1",
+  "summary": {
+    "checks": {
+      "coincidence_boundary_exact": true,
+      "loss_error_within_limit": true,
+      "phase_error_within_limit": true,
+      "repeatability_exact": true,
+      "saturation_exact": true,
+      "timing_boundary_exact": true
+    },
+    "loss_error_limit": 0.025,
+    "loss_max_absolute_error": 0.004863281249999907,
+    "phase_error_limit": 0.04,
+    "phase_max_absolute_error": 0.02047004690672627
+  }
+}

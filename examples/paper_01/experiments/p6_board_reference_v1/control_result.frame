@@ -1,0 +1,21 @@
+PQDR_CONTROL_RESULT_V1
+job_id=p6-board-reference-job
+program_id=p6-board-reference-program
+profile_id=p6-board-profile
+profile_digest=7fdacca57a1d07de3e64b2640f7f0214ffdf74f2ab4ac00afd00f94284bc9591
+program_digest=dd06e2522e21242edf24a9f782044407c5e8952444551f426e688a7acf54e025
+envelope_digest=a0197687db44274a312df0a06ef852305dade25befd77f22c85625a8c6636a11
+acquisition_digest=705f1bdb1e45c88a2142dfe5ed26a0aa020b68874a4c3bc8d672fa2207e53cdd
+status=completed
+shots=1
+repetition_ticks=12
+sweep_points=1
+event_count=6
+acquisition_count=1
+total_device_ticks=12
+overflowed_acquisitions=1
+dropped_events=1
+acquisition_payload_length=653
+acquisition_payload=[{"acquisition_id":"p6-counts","dropped_events":1,"end_tick":11,"kind":"counts","metadata":{"board_id":"red-pitaya-stemlab-125-14","board_image_digest":"15bedd5bff2026d6ffa87f0260461fb1ecb5f70eb4eb4b6596f2b947cdefa46f","board_result_digest":"3cce21e8e04d1171d3dee8153972c950bc8cb0b0223fd253c5b959ea19d56e4e","capability_digest":"bdc06130aa567cf9ee69136aeaec9db2929a04b91e30ef53c641e8acbefafc2e","error_code":0,"execution_target":"p6-software-board-model","final_device_tick":11,"rtl_program_digest":"b952907d383bc77def9d4fdff577fce4c3e2da317e2c12862c6e3519b4385066"},"overflow":true,"payload":{"channel_4":3},"shape":[1],"start_tick":7,"unit":"events"}]
+message=completed by P6.0 software board bridge
+END
